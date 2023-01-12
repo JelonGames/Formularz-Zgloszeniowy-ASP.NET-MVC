@@ -1,0 +1,66 @@
+﻿input[type=checkbox][readonly],
+input[type=radio][readonly] {
+    pointer-events: none !important;
+}
+
+label {
+    pointer-events: none !important;
+}
+
+#navInfo {
+    position: relative;
+
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+#navInfo > h3 {
+    width: 100%;
+}
+
+#textInfo {
+    width: 70%;
+    height: 100%;
+}
+#textInfo > div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    margin-bottom: 10px;
+}
+.line{
+    width: 33%;
+
+    text-align: center;
+}
+
+#controlInfo {
+    width: 30%;
+    height: 100%;
+    text-align: center;
+    align-items: center;
+}
+
+#ResendButton{
+    position: absolute;
+    top: 80%;
+    left: 40%;
+
+    padding: 1px 10px 1px 10px;
+
+    text-decoration: none;
+    color: black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    
+    border: 2px solid black; 
+    border-radius: 25px;
+    background-color: whitesmoke;
+}
+
+#ResendButton:hover{
+    background-color: navajowhite;
+    transform: scale(1.10) rotateZ(-2deg) rotateY(30deg);
+}

@@ -1,0 +1,189 @@
+﻿@model FormuarzRefresh.Models.FormModel.DelPerson
+
+@using System.Data;
+@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Podgląd";
+
+    DataTable dt = JsonConvert.DeserializeObject<DataTable>(ViewData["Form"].ToString());
+    DataTable status = JsonConvert.DeserializeObject<DataTable>(ViewData["Status"].ToString());
+
+    LogOnPerson person = JsonConvert.DeserializeObject<LogOnPerson>(ViewData["Person"].ToString());
+
+    object? error = string.Empty;
+    bool errorBool = false;
+    if (TempData.TryGetValue("errorStatusChange", out error))
+    {
+        error = error.ToString();
+        errorBool = true;
+    }
+}
+<script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/downloadButton.js"></script>
+
+<link rel="stylesheet" href="~/css/ViewFormsDetalis.css" />
+<link rel="stylesheet" href="~/css/downloadButton.css" />
+
+<nav id="navInfo" class="text-center">
+    <h3>
+        @dt.Rows[0]["Title"].ToString()
+    </h3>
+    <div id="textInfo">
+        <div>
+            <div class="line">
+                <b>Użytkonik:</b> @dt.Rows[0]["User"].ToString()
+            </div>
+            <div class="line">
+                <b>Departament:</b> @dt.Rows[0]["Dept"].ToString()
+            </div>
+            <div class="line">
+                <b>Data Wysłania:</b> @dt.Rows[0]["SendDate"].ToString()
+            </div>
+            <div class="line">
+                <b>Data Wykonania:</b> @dt.Rows[0]["CompleteDate"].ToString()
+            </div>
+        </div>
+        <div>
+            <div class="line">
+                @if (dt.Rows[0]["Status"].ToString() == "Nie Zatwierdzony")
+                {
+                    <b>Status:</b>
+
+                    <span style="color: orangered !important;">@dt.Rows[0]["Status"].ToString()</span>
+                }
+                else if (dt.Rows[0]["Status"].ToString() == "Błędnie Wypełniony")
+                {
+                    <b>Status:</b>
+
+                    <span style="color: red !important;">@dt.Rows[0]["Status"].ToString()</span>
+                }
+                else if (dt.Rows[0]["Status"].ToString() == "Gotowe")
+                {
+                    <b>Status:</b>
+
+                    <span style="color: forestgreen !important;">@dt.Rows[0]["Status"].ToString()</span>
+                }
+                else
+                {
+                    <b>Status:</b>
+
+                    <span>@dt.Rows[0]["Status"].ToString()</span>
+                }
+            </div>
+            <div class="line">
+                <b>Kto Zatwierdził:</b> @dt.Rows[0]["ConfirmByName"].ToString()
+            </div>
+            <div class="line">
+                <b>Kto Wykonał:</b> @dt.Rows[0]["RealizedByName"].ToString()
+            </div>
+        </div>
+    </div>
+    <div id="controlInfo">
+        <div class="form-line">
+            <form asp-route="ChangeStatus" asp-route-id="@dt.Rows[0]["ID"]" method="post">
+                Zmień status:<br />
+                <select name="StatusSelect">
+                    <option value="-1"></option>
+                    @foreach (DataRow item in status.Rows)
+                    {
+                        <option value="@int.Parse(item["ID"].ToString())">@item["Name"].ToString()</option>
+                    }
+                </select>
+                <input type="submit" value="Zmień Status" /> <br />
+                @if (errorBool)
+                {
+                    <div class="text-danger text-center error-message bold">@error</div>
+                }
+            </form>
+        </div>
+        <div class="form-line">
+            <button type="button" class="download-btn" id="download-btn" onclick="download(this)">
+                <span class="download-text">Download</span>
+                <iconify-icon class="cloud-icon" icon="ant-design:cloud-upload-outlined" style="color: white;" width="40" height="40"></iconify-icon>
+                <iconify-icon class="check-icon" icon="akar-icons:check" style="color: white;" width="40" height="40"></iconify-icon>
+            </button>
+        </div>
+    </div>
+    @if (person.IsAdmin)
+    {
+        <a asp-route="ResendMail" asp-route-id="@dt.Rows[0]["ID"]" id="ResendButton">Ponownienie wysyłki maila</a>
+    }
+</nav>
+<div id="form" class="text-center">
+    <h1>
+        Usuwanie aplikacji/programów/użytkownika
+    </h1>
+
+    <!--Pierwsza część formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('DataFormal', 'FormalDataArrow')">
+            Dane Formalne Zgłoszenia
+            <div class="arrow arrow-top" id="FormalDataArrow"></div>
+        </button>
+        <div id="DataFormal">
+            <partial name="~/Views/SelectDetailViewForms/Shared/DataFormal.cshtml" />
+        </div>
+    </div>
+
+    <!--DataAccessCointainer-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('DataAccess', 'DataAccessArrow')">
+            Dane Zgłoszeniowe
+            <div class="arrow arrow-bottom" id="DataAccessArrow"></div>
+        </button>
+        <div class="hide" id="DataAccess">
+            <!--Dane Zgłoszeniowe-->
+            <div>
+                <h3>
+                    Dane dotyczące użytkownika
+                </h3>
+                <div class="form-line">
+                    <label asp-for="UserName"></label>
+                    <input asp-for="UserName" id="UserName" readonly />
+                    <div class="error-message text-danger bold hide" id="UserNameError">
+                    </div>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelUser" id="DelUser" readonly />
+                    <label asp-for="DelUser" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelAccess" readonly />
+                    <label asp-for="DelAccess" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelAccessPrinters" readonly />
+                    <label asp-for="DelAccessPrinters" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelAccessToMailbox" readonly />
+                    <label asp-for="DelAccessToMailbox" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelEmail" readonly />
+                    <label asp-for="DelEmail" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelArchiveEmail"readonly />
+                    <label asp-for="DelArchiveEmail" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelDiskZ" readonly />
+                    <label asp-for="DelDiskZ" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelAccessRoom" readonly />
+                    <label asp-for="DelAccessRoom" class="label-checkbox"></label>
+                </div>
+            </div>
+            <!--Dane dostępów-->
+            @if(this.Model.DelUser == false)
+            {
+                <div id="DataAccessView">
+                    <partial name="~/Views/SelectDetailViewForms/Shared/DataAccess.cshtml" />
+                </div>
+            }
+        </div>
+    </div>
+</div>

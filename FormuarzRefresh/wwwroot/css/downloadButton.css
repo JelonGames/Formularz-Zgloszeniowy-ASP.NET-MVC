@@ -1,0 +1,42 @@
+﻿.download-btn{
+    display:flex;
+    align-items: center;
+    padding: 5px 40px 5px 40px;
+    overflow: hidden;
+    background: #00458e;
+    border: 0;
+    border-radius: 15px;
+}
+
+.download-btn span{
+    font-family: 'Bodoni MT Poster';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 29px;
+    line-height: 44px;
+    color: #ffffff;
+    margin-right: 15px;
+}
+
+.check-icon{
+    display: none;
+    transform: translateX(-180%) translateY(200%);
+}
+
+.download-btn .cloud-icon,
+.download-btn span,
+.download-btn,
+.download-btn .check-icon{
+    transition: all 0.5s ease-in-out;
+}
+svg{
+    overflow: visible !important;
+}
+
+.download-btn:hover{
+    background: #085bad;
+}
+
+.download-btn:hover .cloud-icon{
+    transform: scale(1.25);
+}

@@ -1,0 +1,311 @@
+:root {
+    --bs-blue: #0d6efd;
+    --bs-indigo: #6610f2;
+    --bs-purple: #6f42c1;
+    --bs-pink: #d63384;
+    --bs-red: #dc3545;
+    --bs-orange: #fd7e14;
+    --bs-yellow: #ffc107;
+    --bs-green: #198754;
+    --bs-teal: #20c997;
+    --bs-cyan: #0dcaf0;
+    --bs-white: #fff;
+    --bs-gray: #6c757d;
+    --bs-gray-dark: #343a40;
+    --bs-gray-100: #f8f9fa;
+    --bs-gray-200: #e9ecef;
+    --bs-gray-300: #dee2e6;
+    --bs-gray-400: #ced4da;
+    --bs-gray-500: #adb5bd;
+    --bs-gray-600: #6c757d;
+    --bs-gray-700: #495057;
+    --bs-gray-800: #343a40;
+    --bs-gray-900: #212529;
+    --bs-primary: #0d6efd;
+    --bs-secondary: #6c757d;
+    --bs-success: #198754;
+    --bs-info: #0dcaf0;
+    --bs-warning: #ffc107;
+    --bs-danger: #dc3545;
+    --bs-light: #f8f9fa;
+    --bs-dark: #212529;
+    --bs-primary-rgb: 13,110,253;
+    --bs-secondary-rgb: 108,117,125;
+    --bs-success-rgb: 25,135,84;
+    --bs-info-rgb: 13,202,240;
+    --bs-warning-rgb: 255,193,7;
+    --bs-danger-rgb: 220,53,69;
+    --bs-light-rgb: 248,249,250;
+    --bs-dark-rgb: 33,37,41;
+    --bs-white-rgb: 255,255,255;
+    --bs-black-rgb: 0,0,0;
+    --bs-body-rgb: 33,37,41;
+    --bs-font-sans-serif: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    --bs-font-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    --bs-body-font-family: var(--bs-font-sans-serif);
+    --bs-body-font-size: 1rem;
+    --bs-body-font-weight: 400;
+    --bs-body-line-height: 1.5;
+    --bs-body-color: #212529;
+    --bs-body-bg: #fff;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  overflow: hidden;
+}
+
+.container{
+    max-height: 690px;
+}
+
+header {
+    height: 128px;
+}
+
+footer{
+    text-align: center;
+    min-height: 130px;
+}
+
+.navbar-image {
+    width: 205px;
+    height: 112px;
+}
+
+/*ScrollBar dla g³ównej czêœci strony*/
+.scroolBar {
+    overflow-y: auto;
+}
+.scroolBar::-webkit-scrollbar {
+    width: 10px;
+}
+.scroolBar::-webkit-scrollbar-track{
+    box-shadow: inset 0 0 2px grey;
+    border-radius: 10px;
+}
+.scroolBar::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--bs-dark-rgb));
+    border-radius: 10px;
+}
+
+/*G³ówny styl formularza*/
+.main-form{
+    width: 100%;
+}
+.main-form > input, .main-form > span{
+    margin: 5px 0px 0px 0px;
+}
+.main-form > input{
+    border: black solid 2px;
+    border-radius: 20px;
+}
+
+/*Styl dla list rozwijanych (Buttonów)*/
+.dropdown-list {
+    border: solid black 3px !important;
+    border-radius: 20px !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 10px !important;
+}
+.dropdown-button {
+    position: relative !important;
+    width: 100% !important;
+    border: none !important;
+    border-radius: 50px !important;
+    background-color: lightgrey !important;
+    height: 40px !important;
+}
+.dropdown-button > .arrow {
+    position: absolute !important;
+    right: 1% !important;
+    top: 15px !important;
+}
+
+/*tekst pogrubiony*/
+.bold {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+/*Obiekt który oznacza jedn¹ liniê w formularzu (styl formularza ca³ego)*/
+.form-line{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 5px 0px 5px 0px;
+}
+.form-line > label{
+    width: 40%;
+}
+.form-line .label-checkbox {
+    text-align: left;
+    padding-left: 20px;
+    width: 265px;
+}
+.form-line input,
+.form-line select,
+.form-line textarea {
+    border: solid black 2px;
+    border-radius: 10px;
+    margin: 5px 0px 5px 0px;
+    background-color: #f2f2f2;
+}
+.form-line table{
+    width: 100%;
+}
+.form-line table td,
+.form-line table th{
+    width: 25%;
+}
+.form-line table th{
+    text-align: left;
+}
+.form-line table th > input[type=checkbox]{
+    margin-left: 15% !important;
+}
+.form-line select {
+    -moz-appearance: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background: url(https://cdn3.iconfinder.com/data/icons/faticons/32/arrow-down-01-16.png) no-repeat right;
+}
+.form-line input[type=date]::-webkit-calendar-picker-indicator,
+.form-line input[type=datetime]::-webkit-calendar-picker-indicator {
+    -moz-appearance: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 25px !important;
+    height: 25px !important;
+    background: url(https://cdn1.iconfinder.com/data/icons/ionicons-outline-vol-1/512/calendar-outline-256.png) no-repeat right;
+    background-size: 25px;
+}
+.form-line input[type=number]{
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+.form-line input[type=number]::-webkit-inner-spin-button,
+.form-line input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+.form-line select[multiple] {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    height: 100px;
+    width: 100% !important;
+}
+.form-line select[multiple]::-webkit-inner-spin-button,
+.form-line select[multiple]::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+}
+.form-line > input[type=text],
+.form-line > input[type=number],
+.form-line > input[type=date],
+.form-line > input[type=datetime],
+.form-line > select {
+    height: 30px;
+    width: 55%;
+}
+.form-line textarea{
+    width: 100%;
+    height: 20em;
+}
+.form-line input[type=checkbox],
+.form-line input[type=radio]{
+    width: 15px;
+    height: 15px;
+}
+.form-line > div {
+    width: 55%;
+}
+.form-line div > input[type=text],
+.form-line div > input[type=number],
+.form-line div > input[type=date],
+.form-line div > input[type=datetime],
+.form-line div > select {
+    height: 30px;
+    width: 100%;
+}
+.form-line > .dropdown-list{
+    width: 100%;
+}
+
+/*Styl Ustawienia JBSlist*/
+#JBSlist > div{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: center;
+}
+#JBSlist > div > div{
+    width: 50%;
+}
+
+/*Styl dla inputów tylko do odczytu*/
+.input-readonly {
+    border: none !important;
+    color: black !important;
+    -moz-appearance: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background: none !important;
+}
+
+/*Styl do obektów domyœlnie ukrytych*/
+.hide{
+    display: none;
+}
+
+/*Skrza³ka do buttonów*/
+.arrow {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-top: solid black 4px;
+    border-right: solid black 4px;
+}
+.arrow-top{
+    transform: rotate(-45deg);
+}
+.arrow-bottom{
+    transform: rotate(135deg);
+}
+
+.error-message {
+    width: 100%;
+}
+
+/*Przycisk Wysy³ki*/
+#SubmitButton{
+    width: 20%;
+    border-radius: 15px;
+}

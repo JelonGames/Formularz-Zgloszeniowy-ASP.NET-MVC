@@ -1,0 +1,162 @@
+﻿@model FormuarzRefresh.Models.FormModel.TempResources;
+
+@{
+    ViewData["Title"] = "Dodawanie/Usuwanie Zasobu";
+}
+
+<style>
+    #UserPermissionBox{
+        position: relative;
+    }
+
+    #UserPermissionBox > button{
+        position: absolute;
+        top: 70%;
+        left: 25%;
+        border-radius: 30px;
+    }
+
+    #UserPermissionBox > label{
+        min-height: 100px;
+    }
+
+    #UserPermissionBox > table{
+        width: 55%;
+        border-radius: 30px;
+        border: solid black 2px;
+    }
+
+    #UserPermissionBox > table td{
+        border: solid black 2px;
+    }
+
+    #UserPermissionBox > table input[type=text]{
+        width: 100%;
+    }
+
+    textarea{
+        width: 55% !important;
+        height: 10em !important;
+    }
+    
+    .margin-div{
+        margin-bottom: 10px;
+    }
+</style>
+
+<script>
+    function UnHideRadio(){
+        var result = document.querySelector('input[name="AddOrDelResources"]:checked').value;
+
+        if(result == "Add"){
+            document.getElementById('CreateResources').style.display = 'inline';
+            document.getElementById('DeleteResources').style.display = 'none';
+        }
+        else{
+            document.getElementById('CreateResources').style.display = 'none';
+            document.getElementById('DeleteResources').style.display = 'inline';
+        }
+    }
+
+    var maxUsers = 25;
+    var nowUsers = 1;
+
+    function AddNextUserPermission(){
+        nowUsers++;
+        if(nowUsers > maxUsers){
+            alert("Już jest maksymalna liczba użytkowników jakich można przypisać");
+            return;
+        }
+
+        var table = document.getElementById('UserTable');
+        var row = table.insertRow(nowUsers - 1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+
+        cell1.innerHTML = '<input type="text" placeholder="Nazwa użytkonika/grupy" id="permission' + nowUsers + 'user" onchange="UserPermissionValid()" />' +
+                          '<div class="error-message text-danger bold hide" id="permission' + nowUsers + 'Error"></div>';
+        cell2.innerHTML = '<input type="radio" name="permission' + nowUsers + '" value="odczyt" id="permission' + nowUsers + 'read" checked /> <label for="permission' + nowUsers + 'read" onclick="UserPermissionValid()"> Odczyt </label>' +
+                          '<input type="radio" name="permission' + nowUsers + '" value="zapis" id="permission' + nowUsers + 'save" /> <label for="permission' + nowUsers + 'save" onclick="UserPermissionValid()"> Zapis </label>' +
+                          '<input type="radio" name="permission' + nowUsers + '" value="modyfikacja" id="permission' + nowUsers + 'mod" /> <label for="permission' + nowUsers + 'mod" onclick="UserPermissionValid()"> Modyfikacja </label>';
+    }
+</script>
+
+<script type="text/javascript" src="~/js/ValidateResourcesData.js"></script>
+
+<form method="post" class="text-center" asp-action="Resources" asp-controller="SaveForms">
+    <h1>
+        Tworzenie/Usuwanie Zasobu
+    </h1>
+
+    <!--Pierwsza część formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('FormalDataContainer', 'FormalDataArrow')">
+            Dane Formalne Zgłoszenia
+            <div class="arrow arrow-top" id="FormalDataArrow"></div>
+        </button>
+        <!--FormalDataContainer-->
+        <div id="FormalDataContainer">
+            <partial name="~/Views/Shared/DataFormal.cshtml" />
+        </div>
+    </div>
+    <div class="margin-div">
+        <input type="radio" name="AddOrDelResources" asp-for="AddOrDelResources" value="@AddOrDelResources.Add" id="Add" onchange="UnHideRadio(), ChangeType('Add')" /> <label for="Add">Utworzenie nowego zasobu sieciowego</label> <br />
+        <input type="radio" name="AddOrDelResources" asp-for="AddOrDelResources" value="@AddOrDelResources.Del" id="Del" onchange="UnHideRadio(), ChangeType('Del')" /> <label for="Del">Usunięcie istniejącego zasobu sieciowego</label>
+    </div>
+    <div class="margin-div hide" id="CreateResources">
+        <h3>
+            Utworzenie zasobu sieciowego
+        </h3>
+        <div class="form-line">
+            <label asp-for="NameAndGoalResources_Add"></label>
+            <input asp-for="NameAndGoalResources_Add" id="NameAndGoalResources_Add" onchange="NameAndGoalValid()" />
+            <div class="error-message text-danger bold hide" id="NameAndGoalResources_Error"></div>
+        </div>
+        <div class="form-line" id="UserPermissionBox">
+            <label asp-for="UserPermission_Add"></label>
+            <table id="UserTable">
+                <tr>
+                    <td>
+                        <input type="text" placeholder="Nazwa użytkonika/grupy" id="permission1user" onchange="UserPermissionValid()" />
+                        <div class="error-message text-danger bold hide" id="permission1Error"></div>
+                    </td>
+                    <td>
+                        <input type="radio" name="permission1" value="odczyt" id="permission1read" checked /> <label for="permission1read" onclick="UserPermissionValid()">Odczyt</label>
+                        <input type="radio" name="permission1" value="zapis" id="permission1save" /> <label for="permission1save" onclick="UserPermissionValid()">Zapis</label>
+                        <input type="radio" name="permission1" value="modyfikacja" id="permission1mod" /> <label for="permission1mod" onclick="UserPermissionValid()">Modyfikacja</label>
+                    </td>
+                </tr>
+            </table>
+            <button type="button" id="AddUser" onclick="AddNextUserPermission(), UserPermissionValid()">
+                <img src="https://cdn3.iconfinder.com/data/icons/user-interface-169/32/plus-20.png" alt="[Obraz plusa]"/>
+                Dodaj uzytkownika
+            </button>
+            <input asp-for="UserPermission_Add" readonly class="hide" id="UserPermission_Add" />
+        </div>
+        <div class="form-line">
+            <label asp-for="MoreInformation_Add"></label>
+            <textarea asp-for="MoreInformation_Add"></textarea>
+        </div>
+    </div>
+    <div class="margin-div hide" id="DeleteResources">
+        <div class="form-line">
+            <label asp-for="NameResources_Del"></label>
+            <input asp-for="NameResources_Del" id="NameResources_Del" onchange="NameResourcesValid()" />
+            <div class="error-message text-danger bold hide" id="NameResources_Error" ></div>
+        </div>
+        <div class="form-line">
+            <label asp-for="PathResources_Del"></label>
+            <input asp-for="PathResources_Del" id="PathResources_Del" onchange="PathResourcesValid()" />
+            <div class="error-message text-danger bold hide" id="PathResources_Error"></div>
+        </div>
+        <div class="form-line">
+            <label asp-for="DatabaseData_Del"></label>
+            <input asp-for="DatabaseData_Del" />
+        </div>
+        <div class="form-line">
+            <label asp-for="MoreInformation_Del"></label>
+            <textarea asp-for="MoreInformation_Del"></textarea>
+        </div>
+    </div>
+    <input type="submit" value="Wyślij" id="SubmitButton" disabled />
+</form>

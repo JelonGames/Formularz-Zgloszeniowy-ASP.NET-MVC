@@ -1,0 +1,21 @@
+﻿@model FormuarzRefresh.Models.LoginData
+@{
+    ViewData["Title"] = "Logowanie";
+    string error = string.Empty;
+    object? errorObj = null;
+    if(ViewData.TryGetValue("LogError", out errorObj)){
+        error = errorObj.ToString();
+    }
+}
+<form class="text-center main-form" asp-action="LogOn" asp-controller="LogOn" method="post">
+    <span>Login: </span>
+    <input id="LoginBox" type="text" asp-for="Login" /> <br/>
+    <span>Hasło: </span>
+    <input id="PassBox" type="password" asp-for="Password" /> <br />
+    <input type="submit" value="Zaloguj" /> <br />
+    @if(error != string.Empty){
+        <span class="text-danger bold">
+            @error
+        </span>
+    }
+</form>

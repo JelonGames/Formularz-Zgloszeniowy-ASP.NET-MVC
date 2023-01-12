@@ -1,0 +1,255 @@
+﻿@model FormuarzRefresh.Models.FormModel.Resources
+
+@using System.Data;
+@using FormuarzRefresh.Models
+@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Podgląd";
+
+    DataTable dt = JsonConvert.DeserializeObject<DataTable>(ViewData["Form"].ToString());
+    DataTable status = JsonConvert.DeserializeObject<DataTable>(ViewData["Status"].ToString());
+
+    LogOnPerson person = JsonConvert.DeserializeObject<LogOnPerson>(ViewData["Person"].ToString());
+
+    object? error = string.Empty;
+    bool errorBool = false;
+    if (TempData.TryGetValue("errorStatusChange", out error))
+    {
+        error = error.ToString();
+        errorBool = true;
+    }
+    int i = 0;
+}
+<style>
+    #UserPermissionBox {
+        position: relative;
+    }
+
+    #UserPermissionBox > button {
+        position: absolute;
+        top: 70%;
+        left: 25%;
+        border-radius: 30px;
+    }
+
+    #UserPermissionBox > label {
+        min-height: 100px;
+    }
+
+    #UserPermissionBox > table {
+        width: 55%;
+        border-radius: 30px;
+        border: solid black 2px;
+    }
+
+    #UserPermissionBox > table td {
+        border: solid black 2px;
+    }
+
+    #UserPermissionBox > table input[type=text] {
+        width: 100%;
+    }
+
+    textarea {
+        width: 55% !important;
+        height: 10em !important;
+    }
+
+    .margin-div {
+        margin-bottom: 10px;
+    }
+</style>
+
+<script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/downloadButton.js"></script>
+
+<link rel="stylesheet" href="~/css/ViewFormsDetalis.css" />
+<link rel="stylesheet" href="~/css/downloadButton.css" />
+
+<nav id="navInfo" class="text-center">
+    <h3>
+        @dt.Rows[0]["Title"].ToString()
+    </h3>
+    <div id="textInfo">
+        <div>
+            <div class="line">
+                <b>Użytkonik:</b> @dt.Rows[0]["User"].ToString()
+            </div>
+            <div class="line">
+                <b>Departament:</b> @dt.Rows[0]["Dept"].ToString()
+            </div>
+            <div class="line">
+                <b>Data Wysłania:</b> @dt.Rows[0]["SendDate"].ToString()
+            </div>
+            <div class="line">
+                <b>Data Wykonania:</b> @dt.Rows[0]["CompleteDate"].ToString()
+            </div>
+        </div>
+        <div>
+            <div class="line">
+                @if (dt.Rows[0]["Status"].ToString() == "Nie Zatwierdzony")
+                {
+                    <b>Status:</b>
+
+                    <span style="color: orangered !important;">@dt.Rows[0]["Status"].ToString()</span>
+                }
+                else if (dt.Rows[0]["Status"].ToString() == "Błędnie Wypełniony")
+                {
+                    <b>Status:</b>
+
+                    <span style="color: red !important;">@dt.Rows[0]["Status"].ToString()</span>
+                }
+                else if (dt.Rows[0]["Status"].ToString() == "Gotowe")
+                {
+                    <b>Status:</b>
+
+                    <span style="color: forestgreen !important;">@dt.Rows[0]["Status"].ToString()</span>
+                }
+                else
+                {
+                    <b>Status:</b>
+
+                    <span>@dt.Rows[0]["Status"].ToString()</span>
+                }
+            </div>
+            <div class="line">
+                <b>Kto Zatwierdził:</b> @dt.Rows[0]["ConfirmByName"].ToString()
+            </div>
+            <div class="line">
+                <b>Kto Wykonał:</b> @dt.Rows[0]["RealizedByName"].ToString()
+            </div>
+        </div>
+    </div>
+    <div id="controlInfo">
+        <div class="form-line">
+            <form asp-route="ChangeStatus" asp-route-id="@dt.Rows[0]["ID"]" method="post">
+                Zmień status:<br />
+                <select name="StatusSelect">
+                    <option value="-1"></option>
+                    @foreach (DataRow item in status.Rows)
+                    {
+                        <option value="@int.Parse(item["ID"].ToString())">@item["Name"].ToString()</option>
+                    }
+                </select>
+                <input type="submit" value="Zmień Status" /> <br />
+                @if (errorBool)
+                {
+                    <div class="text-danger text-center error-message bold">@error</div>
+                }
+            </form>
+        </div>
+        <div class="form-line">
+            <button type="button" class="download-btn" id="download-btn" onclick="download(this)">
+                <span class="download-text">Download</span>
+                <iconify-icon class="cloud-icon" icon="ant-design:cloud-upload-outlined" style="color: white;" width="40" height="40"></iconify-icon>
+                <iconify-icon class="check-icon" icon="akar-icons:check" style="color: white;" width="40" height="40"></iconify-icon>
+            </button>
+        </div>
+    </div>
+    @if (person.IsAdmin)
+    {
+        <a asp-route="ResendMail" asp-route-id="@dt.Rows[0]["ID"]" id="ResendButton">Ponownienie wysyłki maila</a>
+    }
+</nav>
+<div id="form" class="text-center">
+    <h1>
+        Tworzenie/Usuwanie Zasobu
+    </h1>
+
+    <!--Pierwsza część formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('FormalDataContainer', 'FormalDataArrow')">
+            Dane Formalne Zgłoszenia
+            <div class="arrow arrow-top" id="FormalDataArrow"></div>
+        </button>
+        <!--FormalDataContainer-->
+        <div id="FormalDataContainer">
+            <partial name="~/Views/SelectDetailViewForms/Shared/DataFormal.cshtml" />
+        </div>
+    </div>
+    <div class="margin-div">
+        <input type="radio" name="AddOrDelResources" asp-for="AddOrDelResources" value="@AddOrDelResources.Add" id="Add" readonly /> <label for="Add">Utworzenie nowego zasobu sieciowego</label> <br />
+        <input type="radio" name="AddOrDelResources" asp-for="AddOrDelResources" value="@AddOrDelResources.Del" id="Del" readonly /> <label for="Del">Usunięcie istniejącego zasobu sieciowego</label>
+    </div>
+    @if(this.Model.AddOrDelResources == AddOrDelResources.Add){
+        <div class="margin-div" id="CreateResources">
+            <h3>
+                Utworzenie zasobu sieciowego
+            </h3>
+            <div class="form-line">
+                <label asp-for="NameAndGoalResources_Add"></label>
+                <input asp-for="NameAndGoalResources_Add" id="NameAndGoalResources_Add" readonly />
+            </div>
+            <div class="form-line" id="UserPermissionBox">
+                <label asp-for="UserPermission_Add"></label>
+                <table id="UserTable">
+                    @foreach(string item in this.Model.UserPermission_Add)
+                    {
+                        i++;
+                        string[] tmp = item.Split(',');
+                        Console.WriteLine(item);
+                        @if(tmp.Count() == 2)
+                        {
+                            string us = tmp[0];
+                            string per = tmp[1];
+                            <tr>
+                                <td>
+                                    <input type="text" value="@us" id="permission1user" readonly />
+                                    <div class="error-message text-danger bold hide" id="permission1Error"></div>
+                                </td>
+                                <td>
+                                    @if (per == "odczyt")
+                                    {
+                                        <input type="radio" name="permission{@i}" value="odczyt" id="permission{@i}read" checked readonly /> <label for="permission1read">Odczyt</label>
+                                        <input type="radio" name="permission{@i}" value="zapis" id="permission{@i}save" readonly /> <label for="permission1save">Zapis</label>
+                                        <input type="radio" name="permission{@i}" value="modyfikacja" id="permission{@i}mod" readonly /> <label for="permission1mod">Modyfikacja</label>
+                                    }
+                                    else if (per == "zapis")
+                                    {
+                                        <input type="radio" name="permission{@i}" value="odczyt" id="permission{@i}read" readonly /> <label for="permission1read">Odczyt</label>
+                                        <input type="radio" name="permission{@i}" value="zapis" id="permission{@i}save" checked readonly /> <label for="permission1save">Zapis</label>
+                                        <input type="radio" name="permission{@i}" value="modyfikacja" id="permission{@i}mod" readonly /> <label for="permission1mod">Modyfikacja</label>
+                                    }
+                                    else if (per == "modyfikacja")
+                                    {
+                                        <input type="radio" name="permission{@i}" value="odczyt" id="permission{@i}read" readonly /> <label for="permission1read">Odczyt</label>
+                                        <input type="radio" name="permission{@i}" value="zapis" id="permission{@i}save" readonly /> <label for="permission1save">Zapis</label>
+                                        <input type="radio" name="permission{@i}" value="modyfikacja" id="permission{@i}mod" checked readonly /> <label for="permission1mod">Modyfikacja</label>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <div class="form-line">
+                <label asp-for="MoreInformation_Add"></label>
+                <textarea asp-for="MoreInformation_Add" readonly></textarea>
+            </div>
+        </div>
+    }
+    else if(this.Model.AddOrDelResources == AddOrDelResources.Del)
+    {
+        <div class="margin-div" id="DeleteResources">
+            <div class="form-line">
+                <label asp-for="NameResources_Del"></label>
+                <input asp-for="NameResources_Del" id="NameResources_Del" readonly />
+                <div class="error-message text-danger bold hide" id="NameResources_Error"></div>
+            </div>
+            <div class="form-line">
+                <label asp-for="PathResources_Del"></label>
+                <input asp-for="PathResources_Del" id="PathResources_Del" readonly />
+                <div class="error-message text-danger bold hide" id="PathResources_Error"></div>
+            </div>
+            <div class="form-line">
+                <label asp-for="DatabaseData_Del"></label>
+                <input asp-for="DatabaseData_Del" readonly />
+            </div>
+            <div class="form-line">
+                <label asp-for="MoreInformation_Del"></label>
+                <textarea asp-for="MoreInformation_Del" readonly></textarea>
+            </div>
+        </div>
+    }
+</div>

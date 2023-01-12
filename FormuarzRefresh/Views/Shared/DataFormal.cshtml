@@ -1,0 +1,48 @@
+﻿@model FormuarzRefresh.Models.FormModel.GlobalFormModels.FormalData
+
+@using Newtonsoft.Json;
+@using System.Data;
+
+@{
+    LogOnPerson person = JsonConvert.DeserializeObject<LogOnPerson>(ViewData["Person"].ToString());
+    string businesName = "Kancelaria Prawna Lexus";
+
+    DataTable dept = JsonConvert.DeserializeObject<DataTable>(ViewData["Dept"].ToString());
+}
+
+<h3>
+    Dane Formalne Zgłoszenia
+</h3>
+
+<div class="form-line">
+    <label asp-for="SendDate"></label>
+    <input asp-for="SendDate" type="datetime" value="@DateTime.Now" class="input-readonly" readonly />
+</div>
+<div class="form-line">
+    <label asp-for="Business"></label>
+    <input asp-for="Business" value="@businesName" class="input-readonly" readonly />
+</div>
+<div class="form-line">
+    <label asp-for="Dept"></label>
+    <select asp-for="Dept" id="Dept" onchange="DepartmentsDataValid()">
+        <option></option>
+        @foreach(DataRow row in dept.Rows){
+            <option>@row["Name"]</option>
+        }
+    </select> <br />
+    <div class="error-message hide text-danger bold" id="DeptError">
+
+    </div>
+</div>
+<div class="form-line">
+    <label asp-for="Sender"></label>
+    <input asp-for="Sender" value="@person.FirstName @person.LastName" class="input-readonly" readonly />
+</div>
+<div class="form-line">
+    <label asp-for="Message"></label>
+    <select asp-for="Message">
+        <option></option>
+        <option>Zarząd</option>
+        <option>Jarosław Przytuła</option>
+    </select>
+</div>

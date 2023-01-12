@@ -1,0 +1,143 @@
+﻿@model FormuarzRefresh.Models.ListFormsSearch
+@using System.Data;
+@using Newtonsoft.Json;
+
+@{
+    ViewData["Title"] = "Lista Formularzy";
+    DataTable forms = JsonConvert.DeserializeObject<DataTable>(ViewData["Items"].ToString());
+    int page = (int)ViewData["Page"];
+    int maxPage = (int)ViewData["MaxPage"];
+    LogOnPerson person = JsonConvert.DeserializeObject<LogOnPerson>(ViewData["Person"].ToString());
+
+    DataTable dept = JsonConvert.DeserializeObject<DataTable>(ViewData["Dept"].ToString());
+    DataTable status = JsonConvert.DeserializeObject<DataTable>(ViewData["Status"].ToString());
+}
+<link rel="stylesheet" href="~/css/ListForms.css" />
+<script>
+    function ChangeDisplaySearch(){
+        var object = document.getElementById("formSearch");
+
+        if (object.style.display == "none" || object.style.display == "")
+        {
+            object.style.display = "flex";
+        }
+        else{
+            object.style.display = "none";
+        }
+    }
+</script>
+
+<div id="MainBox">
+    <div id="SearchBox">
+        <div id="SearchData">
+            <form method="post" class="hide" id="formSearch" asp-action="ListFormsSearch" asp-controller="CrmForms">
+                <div class="search-line">
+                    <span>Data wysłania:</span> <br />
+                    <span>Od:</span><input type="date" asp-for="SendDateFrom" /> <span>Do:</span> <input type="date" asp-for="SendDateTo" />
+                </div>
+                <div class="search-line">
+                    <span>Data Ukończenia</span> <br />
+                    <span>Od:</span><input type="date" asp-for="CompleteDateFrom" /> <span>Do:</span> <input type="date" asp-for="CompleteDateTo" />
+                </div>
+                <div class="search-line">
+                    <span>Departament:</span> <br />
+                    <select asp-for="Dept">
+                        <option></option>
+                        @foreach (DataRow row in dept.Rows)
+                        {
+                            <option>@row["Name"]</option>
+                        }
+                    </select>
+                </div>
+                <div class="search-line">
+                    <span>Użytkonik:</span> <br />
+                    @{
+                        if(person.IsHR == true || person.IsAdmin == true)
+                        {
+                            <input asp-for="User" />
+                        }
+                        else{
+                            <input asp-for="User" value="@person.FirstName @person.LastName" readonly />
+                        }
+                    }
+                </div>
+                <div class="search-line">
+                    <span>Status:</span> <br />
+                    <select asp-for="Status">
+                        <option></option>
+                        @foreach (DataRow row in status.Rows)
+                        {
+                            <option>@row["Name"]</option>
+                        }
+                    </select>
+                </div>
+                <div class="search-line">
+                    <span>Tytuł:</span> <br />
+                    <input asp-for="Title" />
+                </div>
+                <input type="submit" id="SubmitButton" value="Szukaj" />
+                <button type="button">@Html.RouteLink("Czyść filtr", "ListForms", new { id = 0 })</button>
+            </form>
+        </div>
+        <div id="SearchUnhideButton">
+            <button type="button" onclick="ChangeDisplaySearch()"></button>
+        </div>
+    </div>
+    @if (forms.Rows.Count > 0 && forms != null)
+    {
+        @foreach (DataRow item in forms.Rows)
+        {
+            <div class="box-Item">
+                <div class="item-1">
+                    <span><b>Użytkownik:</b> @item["User"]</span>     <span><b>Departament:</b> @item["Dept"]</span>     <span><b>Tytuł:</b> @item["Title"]</span> <br />
+                    <span><b>Data Wysłania:</b> @item["SendDate"]</span>        <span><b>DataWykonania:</b> @item["CompleteDate"]</span>
+                </div>
+                <div class="item-2">
+                    <span>
+                        <b>Status:</b>
+                        @{
+                            if (item["Status"].ToString() == "Nie Zatwierdzony")
+                            {
+                                <span style="color: orangered !important;">@item["Status"]</span>
+                            }
+                            else if (item["Status"].ToString() == "Błędnie Wypełniony")
+                            {
+                                <span style="color: red !important;">@item["Status"]</span>
+                            }
+                            else if (item["Status"].ToString() == "Gotowe")
+                            {
+                                <span style="color: forestgreen !important;">@item["Status"]</span>
+                            }
+                            else
+                            {
+                                <span>@item["Status"]</span>
+                            }
+                        }
+                    </span>   <span><b>Wersja:</b> @item["Version"]</span>    <button type="button" class="open-form">@Html.RouteLink("Otwórz", "ViewFormsDetails", new { id = Int64.Parse(item["ID"].ToString())})</button>
+                </div>
+            </div>
+        }
+    }
+    <div id="controll-button" class="text-center">
+    @{
+        if(page == 0)
+        {
+                <button type="button" id="return-button" disabled><a href="">Poprzednia Strona</a></button>
+        }
+        else{
+                <button type="button" id="return-button">@Html.RouteLink("Poprzednia Strona", "ListForms", new { id = page - 1})</button>
+        }
+
+            <span>Strona @(page + 1) / @(maxPage + 1)</span>
+
+        if (page == maxPage)
+        {
+                <button type="button" id="next-button" disabled><a href="">Następna Strona</a></button>
+        }
+        else
+        {
+                <button type="button" id="next-button">@Html.RouteLink("Następna strona", "ListForms", new { id = page + 1 })</button>
+        }
+    }
+    </div>
+</div>

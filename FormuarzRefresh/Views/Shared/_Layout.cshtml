@@ -1,0 +1,101 @@
+﻿@using FormuarzRefresh.Models;
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@using FormuarzRefresh.Function;
+@{
+    LogOnPerson? person = ViewData["Person"]?.ToString() != null ? JsonConvert.DeserializeObject<LogOnPerson>(ViewData["Person"]?.ToString()) : null;
+
+    JObject json = GetJson.Start();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Formularz</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FormuarzRefresh.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <!--Navbar-->
+        <nav class="navbar navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <!--Logo navbar-->
+                <a asp-action="Index" asp-controller="Home">
+                    <img src="~/logo.png" alt="Kancelaria Prawna Lexus" class="navbar-brand navbar-image" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+                    <div class="offcanvas-header">
+                        <!--Logo offcanvas-->
+                        <img src="~/logo.png" alt="Kancelaria Prawna Lexus" class="offcanvas-title" id="offcanvasDarkNavbarLabel" />
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Strona Główna</a>
+                            </li>
+                            @if(person != null)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle active" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Formularze
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item active" asp-action="AddUser" asp-controller="Page" style="background: rgba(0,0,0,0);">Nowy Użytkownik</a></li>
+                                        <li><a class="dropdown-item active" asp-action="ModUser" asp-controller="Page" style="background: rgba(0,0,0,0);">Modyfikacja Użytkownika</a></li>
+                                        <li><a class="dropdown-item active" asp-action="DelUser" asp-controller="Page" style="background: rgba(0,0,0,0);">Usuwanie Użytkownika</a></li>
+                                        <li><a class="dropdown-item active" asp-action="RestartPassword" asp-controller="Page" style="background: rgba(0,0,0,0);">Resetowanie hasła</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item active" asp-action="Resources" asp-controller="Page" style="background: rgba(0,0,0,0);">Dodawanie/Usuwanie Zasobu</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" asp-route="ListForms" asp-route-id="0">Lista Wysłanych Formularzy</a>
+                                </li>
+                            }
+                            <hr />
+                            <li class="nav-item">
+                                @if(person != null)
+                                {
+                                    <a class="nav-link active" aria-current="page" asp-action="LogOut" asp-controller="LogOn">Wyloguj</a>
+                                }
+                                @if (person == null)
+                                {
+                                    <a class="nav-link active" aria-current="page" asp-action="LoginPage" asp-controller="LogOn">Zaloguj</a>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header> <br />
+    <!--MainBody-->
+    <div class="container scroolBar">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!--Footer-->
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - Version: @json["ProjectVerson"].ToString() <br />
+            Author: Daniel Adamczak
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/multiselect-dropdown.js" type="text/javascript"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

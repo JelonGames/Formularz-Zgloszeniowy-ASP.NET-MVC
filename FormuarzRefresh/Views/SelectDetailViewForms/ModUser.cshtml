@@ -1,0 +1,357 @@
+﻿@model FormuarzRefresh.Models.FormModel.ModPerson
+
+@using System.Data;
+@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Podgląd";
+
+    DataTable dt = JsonConvert.DeserializeObject<DataTable>(ViewData["Form"].ToString());
+    DataTable status = JsonConvert.DeserializeObject<DataTable>(ViewData["Status"].ToString());
+
+    LogOnPerson person = JsonConvert.DeserializeObject<LogOnPerson>(ViewData["Person"].ToString());
+
+    object? error = string.Empty;
+    bool errorBool = false;
+    if (TempData.TryGetValue("errorStatusChange", out error))
+    {
+        error = error.ToString();
+        errorBool = true;
+    }
+}
+<script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="~/js/downloadButton.js"></script>
+
+<link rel="stylesheet" href="~/css/ViewFormsDetalis.css" />
+<link rel="stylesheet" href="~/css/downloadButton.css" />
+
+<nav id="navInfo" class="text-center">
+    <h3>
+        @dt.Rows[0]["Title"].ToString()
+    </h3>
+    <div id="textInfo">
+        <div>
+            <div class="line">
+                <b>Użytkonik:</b> @dt.Rows[0]["User"].ToString()
+            </div>
+            <div class="line">
+                <b>Departament:</b> @dt.Rows[0]["Dept"].ToString()
+            </div>
+            <div class="line">
+                <b>Data Wysłania:</b> @dt.Rows[0]["SendDate"].ToString()
+            </div>
+            <div class="line">
+                <b>Data Wykonania:</b> @dt.Rows[0]["CompleteDate"].ToString()
+            </div>
+        </div>
+        <div>
+            <div class="line">
+                @if (dt.Rows[0]["Status"].ToString() == "Nie Zatwierdzony")
+                {
+                    <b>Status:</b>
+
+                    <span style="color: orangered !important;">@dt.Rows[0]["Status"].ToString()</span>
+                }
+                else if (dt.Rows[0]["Status"].ToString() == "Błędnie Wypełniony")
+                {
+                    <b>Status:</b>
+
+                    <span style="color: red !important;">@dt.Rows[0]["Status"].ToString()</span>
+                }
+                else if (dt.Rows[0]["Status"].ToString() == "Gotowe")
+                {
+                    <b>Status:</b>
+
+                    <span style="color: forestgreen !important;">@dt.Rows[0]["Status"].ToString()</span>
+                }
+                else
+                {
+                    <b>Status:</b>
+
+                    <span>@dt.Rows[0]["Status"].ToString()</span>
+                }
+            </div>
+            <div class="line">
+                <b>Kto Zatwierdził:</b> @dt.Rows[0]["ConfirmByName"].ToString()
+            </div>
+            <div class="line">
+                <b>Kto Wykonał:</b> @dt.Rows[0]["RealizedByName"].ToString()
+            </div>
+        </div>
+    </div>
+    <div id="controlInfo">
+        <div class="form-line">
+            <form asp-route="ChangeStatus" asp-route-id="@dt.Rows[0]["ID"]" method="post">
+                Zmień status:<br />
+                <select name="StatusSelect">
+                    <option value="-1"></option>
+                    @foreach (DataRow item in status.Rows)
+                    {
+                        <option value="@int.Parse(item["ID"].ToString())">@item["Name"].ToString()</option>
+                    }
+                </select>
+                <input type="submit" value="Zmień Status" /> <br />
+                @if (errorBool)
+                {
+                    <div class="text-danger text-center error-message bold">@error</div>
+                }
+            </form>
+        </div>
+        <div class="form-line">
+            <button type="button" class="download-btn" id="download-btn" onclick="download(this)">
+                <span class="download-text">Download</span>
+                <iconify-icon class="cloud-icon" icon="ant-design:cloud-upload-outlined" style="color: white;" width="40" height="40"></iconify-icon>
+                <iconify-icon class="check-icon" icon="akar-icons:check" style="color: white;" width="40" height="40"></iconify-icon>
+            </button>
+        </div>
+    </div>
+    @if (person.IsAdmin)
+    {
+        <a asp-route="ResendMail" asp-route-id="@dt.Rows[0]["ID"]" id="ResendButton">Ponownienie wysyłki maila</a>
+    }
+</nav>
+<div id="form" class="text-center">
+    <h1>
+        Tworzenie nowego użytkownika
+    </h1>
+
+    <!--Pierwsza część formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('FormalDataContainer', 'FormalDataArrow')">
+            Dane Formalne Zgłoszenia
+            <div class="arrow arrow-top" id="FormalDataArrow"></div>
+        </button>
+        <!--FormalDataContainer-->
+        <div id="FormalDataContainer">
+            <partial name="~/Views/SelectDetailViewForms/Shared/DataFormal.cshtml" />
+        </div>
+    </div>
+
+    <!--Druga część formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('DataAccessContainer', 'DataAccessArrow')">
+            Dane Zgłoszeniowe
+            <div class="arrow arrow-bottom" id="DataAccessArrow"></div>
+        </button>
+        <div class="hide" id="DataAccessContainer">
+            <!--Dane dotyczące użytkownika-->
+            <div>
+                <h3>
+                    Dane dotyczące użytkownika
+                </h3>
+                <div class="form-line">
+                    <label asp-for="UserName"></label>
+                    <input asp-for="UserName" id="UserName" readonly />
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input type="checkbox"
+                               asp-for="BusinessPhoneCheckbox"
+                               id="BusinessPhoneCheckbox"
+                               readonly />
+                        <label asp-for="BusinessPhoneCheckbox"></label>
+                    </div>
+                    <div>
+                        <div class="" id="BusinessPhone">
+                            <input type="number"
+                                   asp-for="BusinessPhone"
+                                   id="BusinessPhoneValue"
+                                   placeholder="713474..."
+                                   readonly /> <br />
+                            <input type="checkbox" asp-for="DescribeOnPhone" readonly />
+                            <label asp-for="DescribeOnPhone"></label> <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input type="checkbox"
+                               asp-for="VoipProjectCheckbox"
+                               id="VoipProjectCheckbox"
+                               readonly />
+                        <label asp-for="VoipProjectCheckbox"></label>
+                    </div>
+                    <div>
+                        <input asp-for="VoipProject"
+                                class=""
+                                id="VoipProject"
+                                readonly />
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input type="checkbox"
+                               asp-for="ExpandActiveAccount"
+                               id="ExpandActiveAccount"
+                               readonly />
+                        <label asp-for="ExpandActiveAccount"></label>
+                    </div>
+                    <div>
+                        <input type="date"
+                               asp-for="ExpandDateActive"
+                               class=""
+                               id="ExpandDateActive"
+                               readonly />
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input type="checkbox"
+                               asp-for="ChangeLastName"
+                               id="ChangeLastName"
+                               readonly />
+                        <label asp-for="ChangeLastName"></label>
+                    </div>
+                    <div>
+                        <input asp-for="NewLastName" class="" id="NewLastName" readonly />
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div class="dropdown-list">
+                        <button type="button" class="dropdown-button" onclick="ChangeDisplay('RediredtEmailContainer', 'RediredtEmailArrow')">
+                            <input type="checkbox" asp-for="RedirectEmail" id="RedirectEmail" onclick="ChangeDisplay('RediredtEmailContainer', 'RediredtEmailArrow')" readonly />
+                            <label asp-for="RedirectEmail"></label>
+                            <div class="arrow arrow-bottom" id="RediredtEmailArrow"></div>
+                        </button>
+                        @if(this.Model.RedirectEmail == true)
+                        {
+                            <div class="" id="RediredtEmailContainer">
+                            <input asp-for="FromEmail" id="FromEmail" placeholder="Czyją skrzynkę przekierować: (Login)" readonly /> <br />
+                            <input asp-for="ToEmail" id="ToEmail" placeholder="Na kogo przekierować: (login)" readonly /> <br />
+                            <!--Dostępy-->
+                            <input type="radio" name="MethodCopy" asp-for="MethodCopy" value="z kopią u adresata" readonly /> z kopią u adresata
+                            <input type="radio" name="MethodCopy" asp-for="MethodCopy" value="bez kopi u adresata" readonly /> bez kopi u adresata <br />
+
+                            <input type="date" asp-for="WhenRedirect" id="WhenRedirect" onchange="RedirectEmailValid()" readonly />
+                        </div>
+                        }
+                        else
+                        {
+                            <div class="hide" id="RediredtEmailContainer">
+                                <input asp-for="FromEmail" id="FromEmail" placeholder="Czyją skrzynkę przekierować: (Login)" readonly /> <br />
+                                <input asp-for="ToEmail" id="ToEmail" placeholder="Na kogo przekierować: (login)" readonly /> <br />
+                                <!--Dostępy-->
+                                <input type="radio" name="MethodCopy" asp-for="MethodCopy" value="z kopią u adresata" readonly /> z kopią u adresata
+                                <input type="radio" name="MethodCopy" asp-for="MethodCopy" value="bez kopi u adresata" readonly /> bez kopi u adresata <br />
+
+                                <input type="date" asp-for="WhenRedirect" id="WhenRedirect" onchange="RedirectEmailValid()" readonly />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div class="dropdown-list">
+                        <button type="button" class="dropdown-button" onclick="ChangeDisplay('AccessOtherEmailContainer', 'AccessOtherEmailArrow')">
+                            <input type="checkbox" asp-for="AccessOtherEmail" id="AccessOtherEmail" onchange="ChangeDisplay('AccessOtherEmailContainer', 'AccessOtherEmailArrow')" readonly />
+                            <label asp-for="AccessOtherEmail"></label>
+                            <div class="arrow arrow-bottom" id="AccessOtherEmailArrow"></div>
+                        </button>
+                        @if(this.Model.AccessOtherEmail == true)
+                        {
+                            <div class="" id="AccessOtherEmailContainer">
+                            <input asp-for="WhoseEmail" id="WhoseEmail" placeholder="Czyją pocztę udostępnić: (login)" readonly /> <br />
+                            <input asp-for="CommentEmail" placeholder="Uwagi:" readonly />
+                        </div>
+                        }
+                        else
+                        {
+                                <div class="hide" id="AccessOtherEmailContainer">
+                            <input asp-for="WhoseEmail" id="WhoseEmail" placeholder="Czyją pocztę udostępnić: (login)" readonly /> <br />
+                                <input asp-for="CommentEmail" placeholder="Uwagi:" readonly />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div class="dropdown-list">
+                        <button type="button" class="dropdown-button" onclick="ChangeDisplay('AccessOtherDiskZContainer', 'AccessOtherDiskZArrow')">
+                            <input type="checkbox" asp-for="AccessOtherDiskZ" id="AccessOtherDiskZ" onchange="ChangeDisplay('AccessOtherDiskZContainer', 'AccessOtherDiskZArrow')" readonly />
+                            <label asp-for="AccessOtherDiskZ"></label>
+                            <div class="arrow arrow-bottom" id="AccessOtherDiskZArrow"></div>
+                        </button>
+                        @if(this.Model.AccessOtherDiskZ == true)
+                        {
+                            <div class="" id="AccessOtherDiskZContainer">
+                                <input asp-for="WhoseDiskZ" id="WhoseDiskZ" placeholder="Podaj login uzytkownika:" readonly /> <br />
+                                <input type="date" asp-for="WhenAccessDiskZ" id="WhenAccessDiskZ" readonly />
+                                <!--Dostępy-->
+                                <input type="radio" name="PermissionDiskZ" asp-for="PermissionDiskZ" value="Odczyt" readonly /> Odczyt <br />
+                                <input type="radio" name="PermissionDiskZ" asp-for="PermissionDiskZ" value="Modyfikacja" readonly /> Modyfikacja <br />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="hide" id="AccessOtherDiskZContainer">
+                                <input asp-for="WhoseDiskZ" id="WhoseDiskZ" placeholder="Podaj login uzytkownika:" readonly /> <br />
+                                <input type="date" asp-for="WhenAccessDiskZ" id="WhenAccessDiskZ" readonly />
+                                <!--Dostępy-->
+                                <input type="radio" name="PermissionDiskZ" asp-for="PermissionDiskZ" value="Odczyt" readonly /> Odczyt <br />
+                                <input type="radio" name="PermissionDiskZ" asp-for="PermissionDiskZ" value="Modyfikacja" readonly /> Modyfikacja <br />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input type="checkbox"
+                               asp-for="GrowupDiskZ"
+                               id="GrowupDiskZ"
+                               readonly />
+                        <label asp-for="GrowupDiskZ"></label>
+                    </div>
+                    <div>
+                        <textarea asp-for="WhyGrowupDiskZ"
+                                  style="height: 10em;"
+                                  class=""
+                                  id="WhyGrowupDiskZ"
+                                  readonly></textarea>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input type="checkbox" asp-for="InternetAccessCheckbox" id="InternetAccessCheckbox" readonly />
+                        <label asp-for="InternetAccessCheckbox"></label>
+                    </div>
+                    <div>
+                        <div class="" id="InternetAccess">
+                            <input type="radio" name="InternetAccess" asp-for="InternetAccess" value="Ograniczony" readonly /> Ograniczony
+                            <input type="radio" name="InternetAccess" asp-for="InternetAccess" value="Pełny" readonly /> Pełny
+                        </div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input type="checkbox"
+                               asp-for="MorePageCheckbox"
+                               id="MorePageCheckbox"
+                               readonly />
+                        <label asp-for="MorePageCheckbox"></label>
+                    </div>
+                    <div>
+                        <textarea asp-for="MorePage"
+                                  style="height: 10em;"
+                                  class=""
+                                  id="MorePage"
+                                  readonly></textarea>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input type="checkbox" asp-for="RoomAccessCheckbox" id="RoomAccessCheckbox" readonly />
+                        <label asp-for="RoomAccessCheckbox"></label>
+                    </div>
+                    <div>
+                        <div class="" id="RoomAccess">
+                            <input type="checkbox" asp-for="Room1Access" readonly /> <label asp-for="Room1Access"></label>
+                            <input type="checkbox" asp-for="Room2Access" readonly /> <label asp-for="Room2Access"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Dane Dostępów-->
+            <div>
+                <partial name="~/Views/SelectDetailViewForms/Shared/DataAccess.cshtml" />
+            </div>
+        </div>
+    </div>
+</div>

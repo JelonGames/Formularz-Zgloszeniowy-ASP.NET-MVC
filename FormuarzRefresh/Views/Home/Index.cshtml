@@ -1,0 +1,15 @@
+﻿@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Strona Główna";
+    LogOnPerson? person = ViewData["Person"]?.ToString() != null ? JsonConvert.DeserializeObject<LogOnPerson>(ViewData["Person"]?.ToString()) : null;
+}
+
+<div class="text-center">
+    @if(person != null){
+        <h1 class="display-4">Witam cię drogi użytkowniku</h1>
+    }
+    else{
+        <h1 class="display-4">Witam</h1> <br />
+        <span>, proszę się zalogować</span>
+    }
+</div>

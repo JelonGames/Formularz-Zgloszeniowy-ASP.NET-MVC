@@ -1,0 +1,33 @@
+﻿@model FormuarzRefresh.Models.FormModel.GlobalFormModels.FormalData
+
+@using Newtonsoft.Json;
+@using System.Data;
+
+@{
+    string sendDate = this.Model.SendDate.Day + "." + this.Model.SendDate.Month + "." + this.Model.SendDate.Year + " " + this.Model.SendDate.Hour + ":" + this.Model.SendDate.Minute + ":" + this.Model.SendDate.Second + "." + this.Model.SendDate.Millisecond;
+}
+
+<h3>
+    Dane Formalne Zgłoszenia
+</h3>
+
+<div class="form-line">
+    <label asp-for="SendDate"></label>
+    <input asp-for="SendDate" value="@sendDate" type="datetime" class="input-readonly" readonly />
+</div>
+<div class="form-line">
+    <label asp-for="Business"></label>
+    <input asp-for="Business" class="input-readonly" readonly />
+</div>
+<div class="form-line">
+    <label asp-for="Dept"></label>
+    <input type="text" asp-for="Dept" id="Dept" onchange="DepartmentsDataValid()" readonly /><br />
+</div>
+<div class="form-line">
+    <label asp-for="Sender"></label>
+    <input asp-for="Sender" class="input-readonly" readonly />
+</div>
+<div class="form-line">
+    <label asp-for="Message"></label>
+    <input type="text" asp-for="Message" readonly />
+</div>

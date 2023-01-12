@@ -1,0 +1,103 @@
+﻿@model FormuarzRefresh.Models.FormModel.NewPerson
+
+@using System.Data;
+@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Dodawanie Użytkownika";
+
+    DataTable voip = JsonConvert.DeserializeObject<DataTable>(ViewData["Voip"].ToString());
+}
+<script type="text/javascript" src="~/js/ValidateAddUserData.js"></script>
+
+<form method="post" class="text-center" asp-action="NewPerson" asp-controller="SaveForms">
+    <h1>
+        Tworzenie nowego użytkownika
+    </h1>
+
+    <!--Pierwsza część formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('FormalDataContainer', 'FormalDataArrow')">
+            Dane Formalne Zgłoszenia
+            <div class="arrow arrow-top" id="FormalDataArrow"></div>
+        </button>
+        <!--FormalDataContainer-->
+        <div id="FormalDataContainer">
+            <partial name="~/Views/Shared/DataFormal.cshtml" />
+        </div>
+    </div>
+
+    <!--Druga cześć formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('DataAccessContainer', 'DataAccessArrow')">
+            Dane Zgłoszenia
+            <div class="arrow arrow-bottom" id="DataAccessArrow"></div>
+        </button>
+        <!--DataAccessContainer-->
+        <div class="hide" id="DataAccessContainer">
+            <!--Dane dotyczące użytkownika-->
+            <div>
+                <h3>
+                    Dane dotyczące użytkownika
+                </h3>
+                <div class="form-line">
+                    <label asp-for="UserName"></label>
+                    <input asp-for="UserName" id="UserName" onchange="UserNameValid()" />
+                    <div class="error-message hide text-danger bold" id="UserNameError"></div>
+                </div>
+                <div class="form-line">
+                    <label asp-for="BusinessPhone"></label>
+                    <div>
+                        <input asp-for="BusinessPhone" type="number" placeholder="713747..." /> <br />
+                        <input asp-for="DescribeOnPhone" type="checkbox" />
+                        <label asp-for="DescribeOnPhone"></label>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <label asp-for="VoipProject"></label>
+                    <select asp-for="VoipProject">
+                        <option></option>
+                        @foreach(DataRow row in voip.Rows){
+                            <option>@row["Name"]</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-line">
+                    <label asp-for="ActiveDate"></label>
+                    <input asp-for="ActiveDate" type="date" id="ActiveDate" onchange="ActiveDateValid()" />
+                    <div class="error-message hide text-danger bold" id="ActiveDateError"></div>
+                </div>
+                <div class="form-line">
+                    <label asp-for="DeactiveDate"></label>
+                    <input asp-for="DeactiveDate" type="date" id="DeactiveDate" onchange="DeactivDateValid()" />
+                    <div class="error-message hide text-danger bold" id="DeactiveDateError"></div>
+                </div>
+                <div class="form-line">
+                    <label asp-for="ComputerAccess"></label>
+                    <div>
+                        <input asp-for="ComputerAccess" type="radio" name="ComputerAccess" value="Konkretna Jednostka" checked /> <label>Konkretna jednostka</label>
+                        <input asp-for="ComputerAccess" type="radio" name="ComputerAccess" value="Pełny" /> <label>Pełny</label>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <label asp-for="InternetAccess"></label>
+                    <div>
+                        <input asp-for="InternetAccess" type="radio" name="InternetAccess" value="Ograniczony" checked /> <label>Ograniczony</label>
+                        <input asp-for="InternetAccess" type="radio" name="InternetAccess" value="Pełny" /> <label>Pełny</label>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <label>Dostęp do pomieszczeń:</label>
+                    <div>
+                        <input asp-for="Room1Access" type="checkbox" /> <label asp-for="Room1Access"></label>
+                        <input asp-for="Room2Access" type="checkbox" /> <label asp-for="Room2Access"></label>
+                    </div>
+                </div>
+            </div>
+            <!--Dane Dostępów-->
+            <div>
+                <partial name="~/Views/Shared/DataAccess.cshtml" />
+            </div>
+        </div>
+    </div>
+    <input type="submit" value="Wyślij" id="SubmitButton" disabled />
+</form>

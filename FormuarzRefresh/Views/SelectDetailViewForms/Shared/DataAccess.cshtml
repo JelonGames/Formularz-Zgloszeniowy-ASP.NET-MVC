@@ -1,0 +1,822 @@
+﻿@model FormuarzRefresh.Models.FormModel.GlobalFormModels.DataAccess;
+
+@using Newtonsoft.Json;
+@using System.Data;
+@{
+    string printers = string.Empty;
+    foreach(string item in this.Model.Printers){
+        printers += item + ", ";
+    }
+
+    string app = string.Empty;
+    foreach(string item in this.Model.SelectedApps){
+        app += item + ", ";
+    }
+
+}
+<div>
+    <h3>
+        Dane dotyczące dostępu do aplikacji, zasobów i praw użytkownika
+    </h3>
+    <div class="form-line">
+        <div class="dropdown-list">
+            <button type="button" class="dropdown-button" onclick="ChangeDisplay('JBSlist', 'JBSarrow')">
+                Dostęp do aplikacji Lexus
+                <div class="arrow arrow-bottom" id="JBSarrow"></div>
+            </button>
+            @if(this.Model.Database1 || this.Model.Database2 || this.Model.Database3 || this.Model.Database4 || this.Model.Database5 || this.Model.Database6 || this.Model.Database7 || this.Model.Database8 || this.Model.Database9 || this.Model.Database10 || this.Model.Database11 || this.Model.Database12 || this.Model.Database13 || this.Model.Database14 || this.Model.other != string.Empty || this.Model.other2 != string.Empty)
+            {
+                <div class="" id="JBSlist">
+                    <div>
+                        <div>
+                            <input type="checkbox" asp-for="Database1" id="San1" onchange="JbsDataValid('San1', 'San1Per', 'San1Error')" readonly /><label asp-for="Database1"></label> <br />
+                            <input type="text" asp-for="Database1Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database2" id="San2" onchange="JbsDataValid('San2', 'San2Per', 'San2Error')" readonly /><label asp-for="Database2"></label> <br />
+                            <input type="text" asp-for="Database2Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database3" id="Pekao4" onchange="JbsDataValid('Pekao4', 'Pekao4Per', 'Pekao4Error')" readonly /><label asp-for="Database3"></label> <br />
+                            <input type="text" asp-for="Database3Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database4" id="PkoBP4" onchange="JbsDataValid('PkoBP4', 'PkoBP4Per', 'PkoBP4Error')" readonly /><label asp-for="Database4"></label> <br />
+                            <input type="text" asp-for="Database4Per" readonly />
+                        </div>
+                
+                        <div>
+                            <input type="checkbox" asp-for="Database5" id="Mtu2" onchange="JbsDataValid('Mtu2', 'Mtu2Per', 'Mtu2Error')" readonly /><label asp-for="Database5"></label> <br />
+                            <input type="text" asp-for="Database5Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database6" id="Mtu2_print" onchange="JbsDataValid('Mtu2_print', 'Mtu2_printPer', 'Mtu2_printersError')" readonly /><label asp-for="Database6"></label> <br />
+                            <input type="text" asp-for="Database6Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database7" id="Amisodar" onchange="JbsDataValid('Amisodar', 'AmisodarPer', 'AmisodarError')" readonly /><label asp-for="Database7"></label> <br />
+                            <input type="text" asp-for="Database7Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database8" id="Bos" onchange="JbsDataValid('Bos', 'BosPer', 'BosError')" readonly /><label asp-for="Database8"></label> <br />
+                            <input type="text" asp-for="Database8Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database9" id="Chimera" onchange="JbsDataValid('Chimera', 'ChimeraPer', 'ChimeraError')" readonly /><label asp-for="Database9"></label> <br />
+                            <input type="text" asp-for="Database9Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database10" id="Citih" onchange="JbsDataValid('Citih', 'CitihPer', 'CitichError')" readonly /><label asp-for="Database10"></label> <br />
+                            <input type="text" asp-for="Database10Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database11" id="EuBank" onchange="JbsDataValid('EuBank', 'EuBankPer', 'EuBankError')" readonly /><label asp-for="Database11"></label> <br />
+                            <input type="text" asp-for="Database11Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database12" id="Raiff" onchange="JbsDataValid('Raiff', 'RaiffPer', 'RaiffError')" readonly /><label asp-for="Database12"></label> <br />
+                            <input type="text" asp-for="Database12Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database13" id="Skok" onchange="JbsDataValid('Skok', 'SkokPer', 'SkokError')" readonly /><label asp-for="Database13"></label> <br />
+                            <input type="text" asp-for="Database13Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database14" id="Scfs" onchange="JbsDataValid('Scfs', 'ScfsPer', 'ScfsError')" readonly /><label asp-for="Database14"></label> <br />
+                            <input type="text" asp-for="Database14Per" readonly />
+                        </div>
+
+                        <input asp-for="other" placeholder="Inne:" readonly/>
+                        <input asp-for="other2" placeholder="Inne:" readonly/>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="hide" id="JBSlist">
+                    <div>
+                        <div>
+                            <input type="checkbox" asp-for="Database1" id="San1" onchange="JbsDataValid('San1', 'San1Per', 'San1Error')" readonly /><label asp-for="Database1"></label> <br />
+                            <input type="text" asp-for="Database1Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database2" id="San2" onchange="JbsDataValid('San2', 'San2Per', 'San2Error')" readonly /><label asp-for="Database2"></label> <br />
+                            <input type="text" asp-for="Database2Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database3" id="Pekao4" onchange="JbsDataValid('Pekao4', 'Pekao4Per', 'Pekao4Error')" readonly /><label asp-for="Database3"></label> <br />
+                            <input type="text" asp-for="Database3Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database4" id="PkoBP4" onchange="JbsDataValid('PkoBP4', 'PkoBP4Per', 'PkoBP4Error')" readonly /><label asp-for="Database4"></label> <br />
+                            <input type="text" asp-for="Database4Per" readonly />
+                        </div>
+                
+                        <div>
+                            <input type="checkbox" asp-for="Database5" id="Mtu2" onchange="JbsDataValid('Mtu2', 'Mtu2Per', 'Mtu2Error')" readonly /><label asp-for="Database5"></label> <br />
+                            <input type="text" asp-for="Database5Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database6" id="Mtu2_print" onchange="JbsDataValid('Mtu2_print', 'Mtu2_printPer', 'Mtu2_printersError')" readonly /><label asp-for="Database6"></label> <br />
+                            <input type="text" asp-for="Database6Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database7" id="Amisodar" onchange="JbsDataValid('Amisodar', 'AmisodarPer', 'AmisodarError')" readonly /><label asp-for="Database7"></label> <br />
+                            <input type="text" asp-for="Database7Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database8" id="Bos" onchange="JbsDataValid('Bos', 'BosPer', 'BosError')" readonly /><label asp-for="Database8"></label> <br />
+                            <input type="text" asp-for="Database8Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database9" id="Chimera" onchange="JbsDataValid('Chimera', 'ChimeraPer', 'ChimeraError')" readonly /><label asp-for="Database9"></label> <br />
+                            <input type="text" asp-for="Database9Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database10" id="Citih" onchange="JbsDataValid('Citih', 'CitihPer', 'CitichError')" readonly /><label asp-for="Database10"></label> <br />
+                            <input type="text" asp-for="Database10Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database11" id="EuBank" onchange="JbsDataValid('EuBank', 'EuBankPer', 'EuBankError')" readonly /><label asp-for="Database11"></label> <br />
+                            <input type="text" asp-for="Database11Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database12" id="Raiff" onchange="JbsDataValid('Raiff', 'RaiffPer', 'RaiffError')" readonly /><label asp-for="Database12"></label> <br />
+                            <input type="text" asp-for="Database12Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database13" id="Skok" onchange="JbsDataValid('Skok', 'SkokPer', 'SkokError')" readonly /><label asp-for="Database13"></label> <br />
+                            <input type="text" asp-for="Database13Per" readonly />
+                        </div>
+
+                        <div>
+                            <input type="checkbox" asp-for="Database14" id="Scfs" onchange="JbsDataValid('Scfs', 'ScfsPer', 'ScfsError')" readonly /><label asp-for="Database14"></label> <br />
+                            <input type="text" asp-for="Database14Per" readonly />
+                        </div>
+
+                        <input asp-for="other" placeholder="Inne:" readonly/>
+                        <input asp-for="other2" placeholder="Inne:" readonly/>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-line">
+        <label>
+            Dostęp do aplikacji jordan:
+        </label>
+        <div>
+            <input asp-for="Baza1" readonly/><label asp-for="Baza1"></label>
+            <input asp-for="Baza2" readonly/><label asp-for="Baza2"></label>
+            <input asp-for="Baza3" readonly/><label asp-for="Baza3"></label> <br />
+            <input asp-for="OtherDatabase" placeholder="Inne:" readonly/>
+        </div>
+    </div>
+    <div class="form-line">
+        <div class="dropdown-list">
+            <button type="button" class="dropdown-button" onclick="ChangeDisplay('PrintersList', 'PrintersArrow')">
+                Dostęp do drukarek
+                <div class="arrow arrow-bottom" id="PrintersArrow"></div>
+            </button>
+            <div class="" id="PrintersList">
+                <input type="text" asp-for="Printers" value="@printers" readonly />
+            </div>
+        </div>
+    </div>
+    <div class="form-line">
+        <div class="dropdown-list">
+            <button type="button" class="dropdown-button" onclick="ChangeDisplay('AppsList', 'AppsArrow')">
+                <input type="checkbox" asp-for="OtherAppsCheckbox" id="OtherAppsCheckbox" onchange="ChangeDisplay('AppsList', 'AppsArrow')" readonly />
+                <label asp-for="OtherAppsCheckbox"></label>
+                <div class="arrow arrow-bottom" id="AppsArrow"></div>
+            </button>
+            @if(this.Model.OtherAppsCheckbox == true){
+                <div class="" id="AppsList">
+                    <input type="text" asp-for="SelectedApps" value="@app" readonly />
+                    <input asp-for="OtherApps" placeholder="Inne:" readonly />
+                </div>
+            }
+            else{
+                <div class="hide" id="AppsList">
+                    <input type="text" asp-for="SelectedApps" value="@app" readonly />
+                    <input asp-for="OtherApps" placeholder="Inne:" readonly />
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-line">
+        <div class="dropdown-list">
+            <button type="button" class="dropdown-button" onclick="ChangeDisplay('NetResourcesList', 'ArrowNetResources')">
+                <input type="checkbox" asp-for="NetResourcesCheckbox" id="NetResourcesCheckbox" readonly />
+                <label asp-for="NetResourcesCheckbox"></label>
+                <div class="arrow arrow-bottom" id="ArrowNetResources"></div>
+            </button>
+            @if(this.Model.NetResourcesCheckbox == true){
+                <div class="" id="NetResourcesList">
+                    Odczyt - Użytkownik może tylko przeglądać foldery, podfoldery i pliki <br />
+                    Zapis - Odczyt + Użytkownik moze zapisywanać i modyfikować swoje pliki <br />
+                    Modyfikacja - Pełne prawa do folderu <br />
+                    <input asp-for="NetResources" placeholder="Wpisz ścieżkę do zasobu np.: \\serwer\zasób\" id="NerResources" readonly/> <br />
+                    <input type="radio" name="NetRes" asp-for="NetResPer" value="@ReadResources.Odczyt" readonly/> Odczyt
+                    <input type="radio" name="NetRes" asp-for="NetResPer" value="@ReadResources.Zapis" readonly /> Zapis
+                    <input type="radio" name="NetRes" asp-for="NetResPer" value="@ReadResources.Modyfikacja" readonly /> Modyfikacja
+                </div>
+            }
+            else{
+                <div class="hide" id="NetResourcesList">
+                    Odczyt - Użytkownik może tylko przeglądać foldery, podfoldery i pliki <br />
+                    Zapis - Odczyt + Użytkownik moze zapisywanać i modyfikować swoje pliki <br />
+                    Modyfikacja - Pełne prawa do folderu <br />
+                    <input asp-for="NetResources" placeholder="Wpisz ścieżkę do zasobu np.: \\serwer\zasób\" id="NerResources" readonly/> <br />
+                    <input type="radio" name="NetRes" asp-for="NetResPer" value="@ReadResources.Odczyt" readonly/> Odczyt
+                    <input type="radio" name="NetRes" asp-for="NetResPer" value="@ReadResources.Zapis" readonly /> Zapis
+                    <input type="radio" name="NetRes" asp-for="NetResPer" value="@ReadResources.Modyfikacja" readonly /> Modyfikacja
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-line">
+        <div class="dropdown-list">
+            <button type="button" class="dropdown-button" onclick="ChangeDisplay('PublicFolderList', 'PublicFolderArrow')">
+                <input type="checkbox" asp-for="PublicFolderCheckbox" id="PublicFolderCheckbox" onchange="ChangeDisplay('PublicFolderList', 'PublicFolderArrow')" readonly />
+                <label asp-for="PublicFolderCheckbox"></label>
+                <div class="arrow arrow-bottom" id="PublicFolderArrow"></div>
+            </button>
+            @if(this.Model.PublicFolderCheckbox == true){
+                <div class="" id="PublicFolderList">
+                    <input asp-for="PathPublicFolder" id="PathPublicFolder" placeholder="Wpisz ścieżkę do forlderu" onchange="PublicFolderValid()" />
+                    <!--Odczyt zapis plików, towrzenie folderów (Foldery Publiczne)-->
+                    <div>
+                        <input type="checkbox" asp-for="ReadPublicFolder" id="ReadPublicFolder" onchange="PublicFolderValid()" /><label asp-for="ReadPublicFolder"></label>
+                        <input type="checkbox" asp-for="CreateFileOnPublicFolder" id="CreateFileOnPublicFolder" onchange="PublicFolderValid()" /><label asp-for="CreateFileOnPublicFolder"></label>
+                        <input type="checkbox" asp-for="CreateDirectoryOnPublicFolder" id="CreateDirectoryOnPublicFolder" onchange="PublicFolderValid()" /><label asp-for="CreateDirectoryOnPublicFolder"></label>
+                    </div>
+                    <!--Edycja plików (Foldery publiczne)-->
+                    <div>
+                        <label asp-for="Editing"></label>
+                        <input type="radio" name="edditing" asp-for="Editing" value="@PerPublicFolder.Brak" checked /> Brak
+                        <input type="radio" name="edditing" asp-for="Editing" value="@PerPublicFolder.Wlasne" /> Własne
+                        <input type="radio" name="edditing" asp-for="Editing" value="@PerPublicFolder.Wszystkie" /> Wszystkie
+                    </div>
+                    <!--Kasowanie plików (Foldery publiczne)-->
+                    <div>
+                        <label asp-for="Deleting"></label>
+                        <input type="radio" name="edditing" asp-for="Deleting" value="@PerPublicFolder.Brak" checked /> Brak
+                        <input type="radio" name="edditing" asp-for="Deleting" value="@PerPublicFolder.Wlasne" /> Własne
+                        <input type="radio" name="edditing" asp-for="Deleting" value="@PerPublicFolder.Wszystkie" /> Wszystkie
+                    </div>
+                </div>
+            }
+            else{
+                <div class="hide" id="PublicFolderList">
+                    <input asp-for="PathPublicFolder" id="PathPublicFolder" placeholder="Wpisz ścieżkę do forlderu" onchange="PublicFolderValid()" />
+                    <!--Odczyt zapis plików, towrzenie folderów (Foldery Publiczne)-->
+                    <div>
+                        <input type="checkbox" asp-for="ReadPublicFolder" id="ReadPublicFolder" onchange="PublicFolderValid()" /><label asp-for="ReadPublicFolder"></label>
+                        <input type="checkbox" asp-for="CreateFileOnPublicFolder" id="CreateFileOnPublicFolder" onchange="PublicFolderValid()" /><label asp-for="CreateFileOnPublicFolder"></label>
+                        <input type="checkbox" asp-for="CreateDirectoryOnPublicFolder" id="CreateDirectoryOnPublicFolder" onchange="PublicFolderValid()" /><label asp-for="CreateDirectoryOnPublicFolder"></label>
+                    </div>
+                    <!--Edycja plików (Foldery publiczne)-->
+                    <div>
+                        <label asp-for="Editing"></label>
+                        <input type="radio" name="edditing" asp-for="Editing" value="@PerPublicFolder.Brak" checked /> Brak
+                        <input type="radio" name="edditing" asp-for="Editing" value="@PerPublicFolder.Wlasne" /> Własne
+                        <input type="radio" name="edditing" asp-for="Editing" value="@PerPublicFolder.Wszystkie" /> Wszystkie
+                    </div>
+                    <!--Kasowanie plików (Foldery publiczne)-->
+                    <div>
+                        <label asp-for="Deleting"></label>
+                        <input type="radio" name="edditing" asp-for="Deleting" value="@PerPublicFolder.Brak" checked /> Brak
+                        <input type="radio" name="edditing" asp-for="Deleting" value="@PerPublicFolder.Wlasne" /> Własne
+                        <input type="radio" name="edditing" asp-for="Deleting" value="@PerPublicFolder.Wszystkie" /> Wszystkie
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-line">
+        <div class="dropdown-list">
+            <button type="button" class="dropdown-button" onclick="ChangeDisplay('MailboxList', 'MailboxArrow')">
+                <input type="checkbox" asp-for="MailBoxCheckbox" id="MailBoxCheckbox" onchange="ChangeDisplay('MailboxList', 'MailboxArrow')" readonly />
+                <label asp-for="MailBoxCheckbox"></label>
+                <div class="arrow arrow-bottom" id="MailboxArrow"></div>
+            </button>
+            @if(this.Model.MailBoxCheckbox == true){
+                <div class="" id="MailboxList">
+                    <table>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox1" id="AgiDowMB" onchange="UnHide('AgiDowMB', 'AgiDowMBBox')" readonly /><label asp-for="MailBox1"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox1 == true)
+                                {
+                                    <div class="" id="AgiDowMBBox">
+                                        <input type="radio" asp-for="MailBox1Per" name="AgiDowMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox1Per" name="AgiDowMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="AgiDowMBBox">
+                                        <input type="radio" asp-for="MailBox1Per" name="AgiDowMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox1Per" name="AgiDowMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox2" id="BH_CFMB" onchange="UnHide('BH_CFMB', 'BH_CFMBBox')" readonly /><label asp-for="MailBox2"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox2 == true)
+                                {
+                                    <div class="" id="BH_CFMBBox">
+                                        <input type="radio" asp-for="MailBox2Per" name="BH_CFMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox2Per" name="BH_CFMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="BH_CFMBBox">
+                                        <input type="radio" asp-for="MailBox2Per" name="BH_CFMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox2Per" name="BH_CFMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox3" id="BreMB" onchange="UnHide('BreMB', 'BreMBBox')" readonly /><label asp-for="MailBox3"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox3 == true)
+                                {
+                                    <div class="" id="BreMBBox">
+                                        <input type="radio" asp-for="MailBox3Per" name="BreMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox3Per" name="BreMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="BreMBBox">
+                                        <input type="radio" asp-for="MailBox3Per" name="BreMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox3Per" name="BreMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox4" id="DB_KredytMB" onchange="UnHide('DB_KredytMB', 'DB_KredytMBBox')" readonly /><label asp-for="MailBox4"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox4 == true)
+                                {
+                                    <div class="" id="DB_KredytMBBox">
+                                        <input type="radio" asp-for="MailBox4Per" name="DB_KredytMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox4Per" name="DB_KredytMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="DB_KredytMBBox">
+                                        <input type="radio" asp-for="MailBox4Per" name="DB_KredytMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox4Per" name="DB_KredytMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox5" id="DnbNordMB" onchange="UnHide('DnbNordMB', 'DnbNordMBBox')" readonly /><label asp-for="MailBox5"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox5 == true)
+                                {
+                                    <div class="" id="DnbNordMBBox">
+                                        <input type="radio" asp-for="MailBox5Per" name="DnbNordMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox5Per" name="DnbNordMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="DnbNordMBBox">
+                                        <input type="radio" asp-for="MailBox5Per" name="DnbNordMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox5Per" name="DnbNordMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox6" id="GetinMB" onchange="UnHide('GetinMB', 'GetinMBBox')" readonly /><label asp-for="MailBox6"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox6 == true)
+                                {
+                                    <div class="" id="GetinMBBox">
+                                        <input type="radio" asp-for="MailBox6Per" name="GetinMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox6Per" name="GetinMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="GetinMBBox">
+                                        <input type="radio" asp-for="MailBox6Per" name="GetinMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox6Per" name="GetinMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox7" id="InteligoMB" onchange="UnHide('InteligoMB', 'InteligoMBBox')" readonly /><label asp-for="MailBox7"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox7 == true)
+                                {
+                                    <div class="" id="InteligoMBBox">
+                                        <input type="radio" asp-for="MailBox7Per" name="InteligoMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox7Per" name="InteligoMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="InteligoMBBox">
+                                        <input type="radio" asp-for="MailBox7Per" name="InteligoMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox7Per" name="InteligoMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox8" id="MtuMB" onchange="UnHide('MtuMB', 'MtuMBBox')" readonly /><label asp-for="MailBox8"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox8 == true)
+                                {
+                                    <div class="" id="MtuMBBox">
+                                        <input type="radio" asp-for="MailBox8Per" name="MtuMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox8Per" name="MtuMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="MtuMBBox">
+                                        <input type="radio" asp-for="MailBox8Per" name="MtuMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox8Per" name="MtuMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox9" id="PekaoMB" onchange="UnHide('PekaoMB', 'PekaoMBBox')" readonly /><label asp-for="MailBox9"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox9 == true)
+                                {
+                                    <div class="" id="PekaoMBBox">
+                                        <input type="radio" asp-for="MailBox9Per" name="PekaoMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox9Per" name="PekaoMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="PekaoMBBox">
+                                        <input type="radio" asp-for="MailBox9Per" name="PekaoMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox9Per" name="PekaoMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox10" id="StdMB" onchange="UnHide('StdMB', 'StdMBBox')" readonly /><label asp-for="MailBox10"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox10 == true)
+                                {
+                                    <div class="" id="StdMBBox">
+                                        <input type="radio" asp-for="MailBox10Per" name="StdMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox10Per" name="StdMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="StdMBBox">
+                                        <input type="radio" asp-for="MailBox10Per" name="StdMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox10Per" name="StdMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox11" id="VwlVwbMB" onchange="UnHide('VwlVwbMB', 'VwlVwbMBBox')" readonly /><label asp-for="MailBox11"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox11 == true)
+                                {
+                                    <div class="" id="VwlVwbMBBox">
+                                        <input type="radio" asp-for="MailBox11Per" name="VwlVwbMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox11Per" name="VwlVwbMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="VwlVwbMBBox">
+                                        <input type="radio" asp-for="MailBox11Per" name="VwlVwbMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox11Per" name="VwlVwbMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox12" id="ZglMB" onchange="UnHide('ZglMB', 'ZglMBBox')" readonly /><label asp-for="MailBox12"></label>
+                            </th>
+                            <td>
+                                @if (this.Model.MailBox12 == true)
+                                {
+                                    <div class="" id="ZglMBBox">
+                                        <input type="radio" asp-for="MailBox12Per" name="ZglMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox12Per" name="ZglMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="ZglMBBox">
+                                        <input type="radio" asp-for="MailBox12Per" name="ZglMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox12Per" name="ZglMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+            else{
+                <div class="hide" id="MailboxList">
+                    <table>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox1" id="AgiDowMB" onchange="UnHide('AgiDowMB', 'AgiDowMBBox')" readonly /><label asp-for="MailBox1"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox1 == true)
+                                {
+                                    <div class="" id="AgiDowMBBox">
+                                        <input type="radio" asp-for="MailBox1Per" name="AgiDowMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox1Per" name="AgiDowMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="AgiDowMBBox">
+                                        <input type="radio" asp-for="MailBox1Per" name="AgiDowMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox1Per" name="AgiDowMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox2" id="BH_CFMB" onchange="UnHide('BH_CFMB', 'BH_CFMBBox')" readonly /><label asp-for="MailBox2"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox2 == true)
+                                {
+                                    <div class="" id="BH_CFMBBox">
+                                        <input type="radio" asp-for="MailBox2Per" name="BH_CFMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox2Per" name="BH_CFMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="BH_CFMBBox">
+                                        <input type="radio" asp-for="MailBox2Per" name="BH_CFMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox2Per" name="BH_CFMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox3" id="BreMB" onchange="UnHide('BreMB', 'BreMBBox')" readonly /><label asp-for="MailBox3"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox3 == true)
+                                {
+                                    <div class="" id="BreMBBox">
+                                        <input type="radio" asp-for="MailBox3Per" name="BreMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox3Per" name="BreMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="BreMBBox">
+                                        <input type="radio" asp-for="MailBox3Per" name="BreMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox3Per" name="BreMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox4" id="DB_KredytMB" onchange="UnHide('DB_KredytMB', 'DB_KredytMBBox')" readonly /><label asp-for="MailBox4"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox4 == true){
+                                    <div class="" id="DB_KredytMBBox">
+                                        <input type="radio" asp-for="MailBox4Per" name="DB_KredytMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox4Per" name="DB_KredytMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="DB_KredytMBBox">
+                                        <input type="radio" asp-for="MailBox4Per" name="DB_KredytMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox4Per" name="DB_KredytMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox5" id="DnbNordMB" onchange="UnHide('DnbNordMB', 'DnbNordMBBox')" readonly /><label asp-for="MailBox5"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox5 = true)
+                                {
+                                    <div class="" id="DnbNordMBBox">
+                                        <input type="radio" asp-for="MailBox5Per" name="DnbNordMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox5Per" name="DnbNordMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="DnbNordMBBox">
+                                        <input type="radio" asp-for="MailBox5Per" name="DnbNordMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox5Per" name="DnbNordMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox6" id="GetinMB" onchange="UnHide('GetinMB', 'GetinMBBox')" readonly /><label asp-for="MailBox6"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox6 == true){
+                                    <div class="" id="GetinMBBox">
+                                        <input type="radio" asp-for="MailBox6Per" name="GetinMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox6Per" name="GetinMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="GetinMBBox">
+                                        <input type="radio" asp-for="MailBox6Per" name="GetinMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox6Per" name="GetinMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox7" id="InteligoMB" onchange="UnHide('InteligoMB', 'InteligoMBBox')" readonly /><label asp-for="MailBox7"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox7 == true)
+                                {
+                                    <div class="" id="InteligoMBBox">
+                                        <input type="radio" asp-for="MailBox7Per" name="InteligoMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox7Per" name="InteligoMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="InteligoMBBox">
+                                        <input type="radio" asp-for="MailBox7Per" name="InteligoMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox7Per" name="InteligoMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox8" id="MtuMB" onchange="UnHide('MtuMB', 'MtuMBBox')" readonly /><label asp-for="MailBox8"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox8 == true)
+                                {
+                                    <div class="" id="MtuMBBox">
+                                        <input type="radio" asp-for="MailBox8Per" name="MtuMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox8Per" name="MtuMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="MtuMBBox">
+                                        <input type="radio" asp-for="MailBox8Per" name="MtuMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox8Per" name="MtuMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox9" id="PekaoMB" onchange="UnHide('PekaoMB', 'PekaoMBBox')" readonly /><label asp-for="MailBox9"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox9 == true)
+                                {
+                                    <div class="" id="PekaoMBBox">
+                                        <input type="radio" asp-for="MailBox9Per" name="PekaoMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox9Per" name="PekaoMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="PekaoMBBox">
+                                        <input type="radio" asp-for="MailBox9Per" name="PekaoMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox9Per" name="PekaoMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox10" id="StdMB" onchange="UnHide('StdMB', 'StdMBBox')" readonly /><label asp-for="MailBox10"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox10 == true)
+                                {
+                                    <div class="hide" id="StdMBBox">
+                                        <input type="radio" asp-for="MailBox10Per" name="StdMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox10Per" name="StdMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="StdMBBox">
+                                        <input type="radio" asp-for="MailBox10Per" name="StdMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox10Per" name="StdMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox11" id="VwlVwbMB" onchange="UnHide('VwlVwbMB', 'VwlVwbMBBox')" readonly /><label asp-for="MailBox11"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox11 == true)
+                                {
+                                    <div class="" id="VwlVwbMBBox">
+                                        <input type="radio" asp-for="MailBox11Per" name="VwlVwbMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox11Per" name="VwlVwbMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="VwlVwbMBBox">
+                                        <input type="radio" asp-for="MailBox11Per" name="VwlVwbMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox11Per" name="VwlVwbMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                            <th>
+                                <input type="checkbox" asp-for="MailBox12" id="ZglMB" onchange="UnHide('ZglMB', 'ZglMBBox')" readonly /><label asp-for="MailBox12"></label>
+                            </th>
+                            <td>
+                                @if(this.Model.MailBox12 == true)
+                                {
+                                    <div class="" id="ZglMBBox">
+                                        <input type="radio" asp-for="MailBox12Per" name="ZglMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox12Per" name="ZglMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="hide" id="ZglMBBox">
+                                        <input type="radio" asp-for="MailBox12Per" name="ZglMB" value="@PerMB.Odczyt" readonly /> Odczyt
+                                        <input type="radio" asp-for="MailBox12Per" name="ZglMB" value="@PerMB.Modyfikacja" readonly /> Modyfikacja <br />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="form-line">
+        <textarea asp-for="Comment" placeholder="Uwagi" readonly></textarea>
+    </div>
+</div>

@@ -1,0 +1,247 @@
+﻿@model FormuarzRefresh.Models.FormModel.ModPerson;
+
+@using Newtonsoft.Json;
+@using System.Data;
+@{
+    ViewData["Title"] = "Modyfikacja użytkownika";
+
+    DataTable voip = JsonConvert.DeserializeObject<DataTable>(ViewData["Voip"].ToString());
+}
+
+<script type="text/javascript" src="~/js/ValidateModUser.js"></script>
+
+<form method="post" class="text-center" asp-action="ModPerson" asp-controller="SaveForms">
+    <h1>
+        Tworzenie nowego użytkownika
+    </h1>
+
+    <!--Pierwsza część formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('FormalDataContainer', 'FormalDataArrow')">
+            Dane Formalne Zgłoszenia
+            <div class="arrow arrow-top" id="FormalDataArrow"></div>
+        </button>
+        <!--FormalDataContainer-->
+        <div id="FormalDataContainer">
+            <partial name="~/Views/Shared/DataFormal.cshtml" />
+        </div>
+    </div>
+
+    <!--Druga część formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('DataAccessContainer', 'DataAccessArrow')">
+            Dane Zgłoszeniowe
+            <div class="arrow arrow-bottom" id="DataAccessArrow"></div>
+        </button>
+        <div class="hide" id="DataAccessContainer">
+            <!--Dane dotyczące użytkownika-->
+            <div>
+                <h3>
+                    Dane dotyczące użytkownika
+                </h3>
+                <div class="form-line">
+                    <label asp-for="UserName"></label>
+                    <input asp-for="UserName" id="UserName" onchange="UserNameValid()" />
+                    <div class="error-message text-danger bold hide" id="UserNameError"></div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input 
+                            type="checkbox" 
+                            asp-for="BusinessPhoneCheckbox" 
+                            id="BusinessPhoneCheckbox"
+                            onchange="UnHide('BusinessPhoneCheckbox', 'BusinessPhone'), ValidateHideObject('BusinessPhoneCheckbox', 'BusinessPhoneValue', 'BusinessPhoneError', 'BP')" />
+                        <label asp-for="BusinessPhoneCheckbox"></label>
+                    </div>
+                    <div>
+                        <div class="hide" id="BusinessPhone">
+                            <input 
+                                type="number" 
+                                asp-for="BusinessPhone" 
+                                id="BusinessPhoneValue"
+                                placeholder="713474..."
+                                onchange="ValidateHideObject('BusinessPhoneCheckbox', 'BusinessPhoneValue', 'BusinessPhoneError', 'BP')" /> <br />
+                            <input type="checkbox" asp-for="DescribeOnPhone" />
+                            <label asp-for="DescribeOnPhone"></label> <br />
+                            <div id="BusinessPhoneError" class="hide error-message text-danger bold"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input 
+                            type="checkbox" 
+                            asp-for="VoipProjectCheckbox" 
+                            id="VoipProjectCheckbox"
+                            onchange="UnHide('VoipProjectCheckbox', 'VoipProject'), ValidateHideObject('VoipProjectCheckbox', 'VoipProject', 'VoipProjectError', 'VP')" />
+                        <label asp-for="VoipProjectCheckbox"></label>
+                    </div>
+                    <div>
+                        <select 
+                            asp-for="VoipProject" 
+                            class="hide" 
+                            id="VoipProject"
+                            onchange="ValidateHideObject('VoipProjectCheckbox', 'VoipProject', 'VoipProjectError', 'VP')">
+                        <option></option>
+                            @foreach (DataRow item in voip.Rows)
+                            {
+                                    <option>@item["Name"].ToString()</option>
+                            }
+                        </select>
+                        <div class="hide error-message text-danger bold" id="VoipProjectError"></div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input 
+                            type="checkbox" 
+                            asp-for="ExpandActiveAccount" 
+                            id="ExpandActiveAccount"
+                               onchange="UnHide('ExpandActiveAccount', 'ExpandDateActive'), ValidateHideObject('ExpandActiveAccount', 'ExpandDateActive', 'ExpandActiveAccountError', 'EAD')" />
+                        <label asp-for="ExpandActiveAccount"></label>
+                    </div>
+                    <div>
+                        <input 
+                            type="date" 
+                            asp-for="ExpandDateActive" 
+                            class="hide" 
+                            id="ExpandDateActive"
+                            onchange="ValidateHideObject('ExpandActiveAccount', 'ExpandDateActive', 'ExpandActiveAccountError', 'EAD')" />
+                            <div class="error-message text-danger bold hide" id="ExpandActiveAccountError"></div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input 
+                            type="checkbox" 
+                            asp-for="ChangeLastName" 
+                            id="ChangeLastName"
+                               onchange="UnHide('ChangeLastName', 'NewLastName'), ValidateHideObject('ChangeLastName', 'NewLastName', 'ChangeLastNameError', 'CLN')" />
+                        <label asp-for="ChangeLastName"></label>
+                    </div>
+                    <div>
+                        <input asp-for="NewLastName" class="hide" id="NewLastName" onchange="ValidateHideObject('ChangeLastName', 'NewLastName', 'ChangeLastNameError', 'CLN')" />
+                        <div class="error-message text-danger bold hide" id="ChangeLastNameError"></div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div class="dropdown-list">
+                        <button type="button" class="dropdown-button" onclick="ChangeDisplay('RediredtEmailContainer', 'RediredtEmailArrow'), CheckboxButton('RedirectEmail')">
+                            <input type="checkbox" asp-for="RedirectEmail" id="RedirectEmail" onchange="ChangeDisplay('RediredtEmailContainer', 'RediredtEmailArrow'), RedirectEmailValid()" />
+                            <label asp-for="RedirectEmail"></label>
+                            <div class="arrow arrow-bottom" id="RediredtEmailArrow"></div>
+                        </button>
+                        <div class="hide" id="RediredtEmailContainer">
+                            <input asp-for="FromEmail" id="FromEmail" onchange="RedirectEmailValid()" placeholder="Czyją skrzynkę przekierować: (Login)" /> <br />
+                            <input asp-for="ToEmail" id="ToEmail" onchange="RedirectEmailValid()" placeholder="Na kogo przekierować: (login)" /> <br />
+                            <!--Dostępy-->
+                            <input type="radio" name="MethodCopy" asp-for="MethodCopy" value="z kopią u adresata" /> z kopią u adresata
+                            <input type="radio" name="MethodCopy" asp-for="MethodCopy" value="bez kopi u adresata" checked /> bez kopi u adresata <br />
+
+                            <input type="date" asp-for="WhenRedirect" id="WhenRedirect" onchange="RedirectEmailValid()" />
+                            <div id="RedirectEmailError" class="text-danger error-message hide bold"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div class="dropdown-list">
+                        <button type="button" class="dropdown-button" onclick="ChangeDisplay('AccessOtherEmailContainer', 'AccessOtherEmailArrow'), CheckboxButton('AccessOtherEmail')">
+                            <input type="checkbox" asp-for="AccessOtherEmail" id="AccessOtherEmail" onchange="ChangeDisplay('AccessOtherEmailContainer', 'AccessOtherEmailArrow'), AccessOtherEmailValid()" />
+                            <label asp-for="AccessOtherEmail"></label>
+                            <div class="arrow arrow-bottom" id="AccessOtherEmailArrow"></div>
+                        </button>
+                        <div class="hide" id="AccessOtherEmailContainer">
+                            <input asp-for="WhoseEmail" id="WhoseEmail" onchange="AccessOtherEmailValid()" placeholder="Czyją pocztę udostępnić: (login)" /> <br />
+                            <input asp-for="CommentEmail" placeholder="Uwagi:" />
+                            <div id="AccessOtherEmailError" class="hide text-danger error-message bold"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div class="dropdown-list">
+                        <button type="button" class="dropdown-button" onclick="ChangeDisplay('AccessOtherDiskZContainer', 'AccessOtherDiskZArrow'), CheckboxButton('AccessOtherDiskZ')">
+                            <input type="checkbox" asp-for="AccessOtherDiskZ" id="AccessOtherDiskZ" onchange="ChangeDisplay('AccessOtherDiskZContainer', 'AccessOtherDiskZArrow'), AccessOtherDiskZValid()" />
+                            <label asp-for="AccessOtherDiskZ"></label>
+                            <div class="arrow arrow-bottom" id="AccessOtherDiskZArrow"></div>
+                        </button>
+                        <div class="hide" id="AccessOtherDiskZContainer">
+                            <input asp-for="WhoseDiskZ" id="WhoseDiskZ" onchange="AccessOtherDiskZValid()" placeholder="Podaj login uzytkownika:" /> <br />
+                            <input type="date" asp-for="WhenAccessDiskZ" id="WhenAccessDiskZ" onchange="AccessOtherDiskZValid()" />
+                            <!--Dostępy-->
+                            <input type="radio" name="PermissionDiskZ" asp-for="PermissionDiskZ" value="Odczyt" checked /> Odczyt <br />
+                            <input type="radio" name="PermissionDiskZ" asp-for="PermissionDiskZ" value="Modyfikacja" /> Modyfikacja <br />
+                            <div id="AccessOtherDiskZError" class="text-danger error-message bold hide"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input 
+                            type="checkbox" 
+                            asp-for="GrowupDiskZ" 
+                            id="GrowupDiskZ"
+                               onchange="UnHide('GrowupDiskZ', 'WhyGrowupDiskZ'), ValidateHideObject('GrowupDiskZ', 'WhyGrowupDiskZ', 'GrowupDiskZError', 'GDZ')" />
+                        <label asp-for="GrowupDiskZ"></label>
+                    </div>
+                    <div>
+                        <textarea 
+                            asp-for="WhyGrowupDiskZ" 
+                            style="height: 10em;" 
+                            class="hide" 
+                            id="WhyGrowupDiskZ"
+                            onchange="ValidateHideObject('GrowupDiskZ', 'WhyGrowupDiskZ', 'GrowupDiskZError', 'GDZ')"></textarea>
+                        <div class="error-message text-danger bold hide" id="GrowupDiskZError"></div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input type="checkbox" asp-for="InternetAccessCheckbox" id="InternetAccessCheckbox" onchange="UnHide('InternetAccessCheckbox', 'InternetAccess')" />
+                        <label asp-for="InternetAccessCheckbox"></label>
+                    </div>
+                    <div>
+                        <div class="hide" id="InternetAccess">
+                            <input type="radio" name="InternetAccess" asp-for="InternetAccess" value="Ograniczony" checked/> Ograniczony
+                            <input type="radio" name="InternetAccess" asp-for="InternetAccess" value="Pełny" /> Pełny
+                        </div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style="width: 40%;">
+                        <input 
+                            type="checkbox" 
+                            asp-for="MorePageCheckbox" 
+                            id="MorePageCheckbox"
+                            onchange="UnHide('MorePageCheckbox', 'MorePage'), ValidateHideObject('MorePageCheckbox', 'MorePage', 'MorePageError', 'MP')" />
+                        <label asp-for="MorePageCheckbox"></label>
+                    </div>
+                    <div>
+                        <textarea 
+                            asp-for="MorePage" 
+                            style="height: 10em;" 
+                            class="hide" 
+                            id="MorePage"
+                            onchange="ValidateHideObject('MorePageCheckbox', 'MorePage', 'MorePageError', 'MP')"></textarea>
+                        <div class="error-message text-danger bold hide" id="MorePageError"></div>
+                    </div>
+                </div>
+                <div class="form-line">
+                    <div style ="width: 40%;">
+                        <input type="checkbox" asp-for="RoomAccessCheckbox" id="RoomAccessCheckbox" onchange="UnHide('RoomAccessCheckbox', 'RoomAccess')" />
+                        <label asp-for="RoomAccessCheckbox"></label>
+                    </div>
+                    <div>
+                        <div class="hide" id="RoomAccess">
+                            <input type="checkbox" asp-for="Room1Access" /> <label asp-for="Room1Access"></label>
+                            <input type="checkbox" asp-for="Room2Access" /> <label asp-for="Room2Access"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Dane Dostępów-->
+            <div>
+                <partial name="~/Views/Shared/DataAccess.cshtml" />
+            </div>
+        </div>
+    </div>
+    <input type="submit" value="Wyślij" id="SubmitButton" disabled />
+</form>

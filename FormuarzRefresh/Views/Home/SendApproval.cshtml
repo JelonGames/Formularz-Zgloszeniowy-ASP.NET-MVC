@@ -1,0 +1,27 @@
+﻿@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Potwierdzenie";
+
+    object? errorObj = null;
+    string errorMassage = string.Empty;
+    if (ViewData.TryGetValue("Error", out errorObj))
+    {
+        ErrorViewModel error = JsonConvert.DeserializeObject<ErrorViewModel>(errorObj.ToString());
+        errorMassage = error.RequestId;
+        Console.WriteLine(errorMassage);
+    }
+}
+
+@if (errorMassage != string.Empty)
+{
+        <h1>Formularz został zapisany w bazie, ale <span class="text-danger">wysyłka maili napotkała problem</span></h1>
+        <p>Error: <span class="text-danger bold error-message">@errorMassage</span></p>
+        <br />
+        <br />
+        <p>Powiadom IT by ponowili wysyłkę maila</p>
+}
+else
+{
+        <h1>Formularz został prawidłowo zapisany i wysłany do działu HR</h1>
+        <p>Na mail została wysłana wiadomość z addresem do strony, aby móc opserwować status maila</p>
+}

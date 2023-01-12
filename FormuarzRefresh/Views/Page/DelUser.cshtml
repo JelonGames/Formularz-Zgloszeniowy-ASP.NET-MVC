@@ -1,0 +1,84 @@
+﻿@model FormuarzRefresh.Models.FormModel.DelPerson;
+
+@{
+    ViewData["Title"] = "Usuwanie Użytkownika";
+}
+<script type="text/javascript" src="~/js/ValidateDelUserData.js"></script>
+
+<form method="post" class="text-center" asp-action="DelPerson" asp-controller="SaveForms">
+
+    <h1>
+        Usuwanie aplikacji/programów/użytkownika
+    </h1>
+
+    <!--Pierwsza część formularza-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('DataFormal', 'FormalDataArrow')">
+            Dane Formalne Zgłoszenia
+            <div class="arrow arrow-top" id="FormalDataArrow"></div>
+        </button>
+        <div id="DataFormal">
+            <partial name="~/Views/Shared/DataFormal.cshtml" />
+        </div>
+    </div>
+
+    <!--DataAccessCointainer-->
+    <div class="dropdown-list">
+        <button type="button" class="dropdown-button" onclick="ChangeDisplay('DataAccess', 'DataAccessArrow')">
+            Dane Zgłoszeniowe
+            <div class="arrow arrow-bottom" id="DataAccessArrow"></div>
+        </button>
+        <div class="hide" id="DataAccess">
+            <!--Dane Zgłoszeniowe-->
+            <div>
+                <h3>
+                    Dane dotyczące użytkownika
+                </h3>
+                <div class="form-line">
+                    <label asp-for="UserName"></label>
+                    <input asp-for="UserName" id="UserName" onchange="UserNameValid()" />
+                    <div class="error-message text-danger bold hide" id="UserNameError">
+
+                    </div>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelUser" id="DelUser" onchange="HideObject('DelUser', 'DataAccessView')" />
+                    <label asp-for="DelUser" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelAccess" />
+                    <label asp-for="DelAccess" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelAccessPrinters" />
+                    <label asp-for="DelAccessPrinters" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelAccessToMailbox">
+                    <label asp-for="DelAccessToMailbox" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelEmail" />
+                    <label asp-for="DelEmail" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelArchiveEmail" />
+                    <label asp-for="DelArchiveEmail" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelDiskZ" />
+                    <label asp-for="DelDiskZ" class="label-checkbox"></label>
+                </div>
+                <div class="form-line">
+                    <input type="checkbox" asp-for="DelAccessRoom" />
+                    <label asp-for="DelAccessRoom" class="label-checkbox"></label>
+                </div>
+            </div>
+            <!--Dane dostępów-->
+            <div id="DataAccessView">
+                <partial name="~/Views/Shared/DataAccess.cshtml" />
+            </div>
+        </div>
+    </div>
+    <input type="submit" value="Wyślij" id="SubmitButton" disabled />
+</form>

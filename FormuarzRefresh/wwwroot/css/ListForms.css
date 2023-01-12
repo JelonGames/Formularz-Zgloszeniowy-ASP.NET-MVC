@@ -1,0 +1,133 @@
+﻿.box-Item{
+    border-bottom: 2px;
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 0px;
+    border-color: lightgrey;
+    border-style: solid;
+
+    width: 100%;
+
+    margin-bottom: 10px;
+}
+.item-1,
+.item-2 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    position: relative;
+}
+.item-1 > span,
+.item-2 > span {
+    width: 33%;
+}
+.item-2 > button{
+    position: absolute;
+    right: 1%;
+    top: -100%;
+}
+
+.open-form{
+    border-bottom-right-radius: 50%;
+    border-top-left-radius: 50%;
+
+    width: 8%
+}
+.open-form:hover{
+    background-color: lightblue;
+}
+.open-form > a{
+    text-decoration: none;
+    text-align:center;
+    color: black;
+}
+.open-form:hover > a {
+    font-weight: 600;
+}
+
+#controll-button{
+    height: 50px;
+    position: relative;
+}
+#next-button,
+#return-button{
+    border-radius: 50px;
+    position: absolute;
+    top: 30%;
+}
+#next-button:hover,
+#return-button:hover{
+    background-color: lightblue;
+}
+#return-button {
+    left: 1%;
+}
+
+#next-button {
+    right: 1%;
+}
+
+
+#next-button > a,
+#return-button > a {
+    text-decoration: none;
+    text-align: center;
+    color: black;
+}
+#next-button:hover > a,
+#return-button:hover > a{
+    font-weight: 600;
+}
+
+#SearchBox{
+    min-height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    margin-bottom: 10px;
+}
+#SearchData,
+#SearchUnhideButton{
+    height: 100%;
+}
+#SearchUnhideButton{
+    position: relative;
+    width: 10%;
+}
+#SearchUnhideButton > button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-image: url("https://cdn3.iconfinder.com/data/icons/searchicons/338/Searchicons-search-people2-32.png");
+    height: 32px;
+    width: 32px;
+}
+#SearchData{
+    width: 90%;
+}
+
+#formSearch{
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.search-line {
+    width: 50% !important;
+}
+.search-line > span{
+    font-weight: 700;
+}
+.search-line > input[type=text],
+.search-line > select{
+    width: 80%;
+}
+#formSearch > button[type=button]{
+    border-radius: 50px;
+    margin-left: 10px;
+}
+#formSearch > button[type=button] > a{
+    text-decoration: none;
+    color: black;
+}
